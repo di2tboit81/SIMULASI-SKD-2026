@@ -58,6 +58,11 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
  .exam-wrap{grid-template-columns:1fr}.sidebar{position:static}
  .exam-head-in{flex-wrap:wrap}.timer{font-size:20px}
 }
+
+/* LOCAL DATABASE BUTTON:
+   Only visible when the app is opened directly from the computer (file://).
+   Hidden on ONLINE/HTTP(S) hosting. */
+#localDbBtn.online-hidden{display:none !important;}
 </style>
 
 <style>
@@ -149,8 +154,44 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style>
+.info-local-btn{
+  border:1px solid rgba(255,255,255,.55);
+  background:linear-gradient(135deg,#8b0000,#d4af37,#c0c0c0);
+  color:#fff;
+  font-weight:800;
+  padding:10px 15px;
+  border-radius:12px;
+  cursor:pointer;
+  box-shadow:0 0 16px rgba(212,175,55,.35);
+}
+.info-local-btn:hover{transform:translateY(-1px);filter:brightness(1.12)}
+</style>
+
+
+<style>
+  /* ONLINE: tombol database lokal disembunyikan.
+     LOCAL (file://): tombol tetap tersedia. */
+  .local-db-only { display: none !important; }
+  body.local-mode .local-db-only { display: inline-flex !important; }
+</style>
+<script>
+(function(){
+  function setLocalMode(){
+    document.body.classList.toggle('local-mode', location.protocol === 'file:');
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setLocalMode);
+  }else{
+    setLocalMode();
+  }
+})();
+</script>
+
 </head>
 <body>
+<input id="localExcelInput" type="file" accept=".xlsx,.xls" style="display:none" aria-hidden="true">
 <div class="app">
   <div class="topbar">
     <div class="brand">
@@ -271,6 +312,12 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
           <tbody id="dbDetail"><tr><td colspan="5">Menunggu database...</td></tr></tbody>
         </table>
       </div>
+      <div style="display:flex;justify-content:center;margin-top:16px;">
+        <button id="chooseLocalExcel" type="button" class="info-local-btn" class=">💻 PILIH DATABASE EXCEL LOKAL</button>
+      </div>
+      <div style="text-align:center;margin-top:7px;font-size:11px;color:#69717a;line-height:1.5">
+        Pengujian komputer: pilih file Excel secara manual. Saat online, database dibaca otomatis dari server/GitHub.
+      </div>
       <div class="info-foot">
         <span class="shine-dot"></span> Database dibaca langsung dari file Excel yang ditempatkan bersama aplikasi.<br>
         <b>Catatan:</b> angka di panel ini dihitung otomatis dari data yang berhasil dibaca, bukan ditulis manual di HTML.
@@ -286,6 +333,13 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
    Nama file sengaja dibuat tetap agar database dapat diganti 7000 -> 8000 -> dst
    tanpa perlu mengubah file HTML.
 */
+
+function updateLocalDbButtonVisibility(){
+  const btn = document.getElementById("chooseLocalExcel");
+  if(!btn) return;
+  const online = /^https?:$/i.test(location.protocol);
+  btn.classList.toggle("online-hidden", online);
+}
 const DB_FILE_NAME = "Database_SIMULASI_SKD_IPDN_CPNS.xlsx";
 let BANK = [];
 let bankLoadPromise = null;
@@ -318,37 +372,63 @@ function excelRowToQuestion(row, index){
   };
 }
 
-async function loadBankFromExcel(){
-  if(BANK.length) return BANK;
-  if(bankLoadPromise) return bankLoadPromise;
-  bankLoadPromise=(async()=>{
-    try{
-      if(typeof XLSX === "undefined") throw new Error("Library Excel belum tersedia.");
-      const response=await fetch(DB_FILE_NAME+"?v="+Date.now(),{cache:"no-store"});
-      if(!response.ok) throw new Error("File database tidak ditemukan (HTTP "+response.status+").");
-      const buffer=await response.arrayBuffer();
-      const wb=XLSX.read(buffer,{type:"array"});
-      const sheet=wb.Sheets["BANK_SOAL"] || wb.Sheets[wb.SheetNames[0]];
-      if(!sheet) throw new Error("Sheet BANK_SOAL tidak ditemukan.");
-      const rows=XLSX.utils.sheet_to_json(sheet,{defval:""});
-      const seen=new Set();
-      BANK=rows.map((row,i)=>excelRowToQuestion(row,i+2)).filter(Boolean).filter(item=>{
-        const key=normalizeQuestion(item.q);
-        if(seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-      if(!BANK.length) throw new Error("Database Excel tidak berisi soal yang valid.");
-      return BANK;
-    }catch(err){
-      BANK=[];
-      bankLoadPromise=null;
-      const localHint=location.protocol==="file:" ? "\n\nCatatan: buka aplikasi melalui GitHub Pages/hosting HTTP atau HTTPS, bukan dengan double-click file HTML." : "";
-      alert("Database soal gagal dimuat.\n\nPastikan file "+DB_FILE_NAME+" berada satu folder dengan index.html."+localHint+"\n\nDetail: "+err.message);
-      throw err;
+async function loadBankFromExcel(fileOverride=null){
+  if(window.__BANK_READY && !fileOverride) return BANK;
+
+  try{
+    let arrayBuffer;
+
+    if(fileOverride){
+      arrayBuffer = await fileOverride.arrayBuffer();
+    }else{
+      const url = DB_FILE_NAME + "?v=" + Date.now();
+      const response = await fetch(url, {cache:"no-store"});
+      if(!response.ok) throw new Error("HTTP " + response.status);
+      arrayBuffer = await response.arrayBuffer();
     }
-  })();
-  return bankLoadPromise;
+
+    const workbook = XLSX.read(arrayBuffer,{type:"array"});
+    const sheetName = workbook.SheetNames.includes("BANK_SOAL")
+      ? "BANK_SOAL"
+      : workbook.SheetNames[0];
+
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName],{defval:""});
+
+    const normalize = v => String(v ?? "").trim();
+
+    // SATU BARIS VALID DI EXCEL = SATU SOAL.
+    // Soal dengan teks sama tetap dipertahankan sebagai record terpisah.
+    BANK = rows.map((r,idx)=>{
+      const question = normalize(r.Soal || r.soal || r.Question || r.question);
+      if(!question) return null;
+
+      return {
+        id: normalize(r.ID || r.Id || r.id) || ("EXCEL-"+(idx+1)),
+        cat: normalize(r.Kategori || r.KATEGORI || r.KategoriSoal).toUpperCase(),
+        sub: normalize(r.Submateri || r.SUBMATERI),
+        level: normalize(r.Tingkat || r.TINGKAT).toLowerCase(),
+        q: question,
+        A: normalize(r.A), B: normalize(r.B), C: normalize(r.C),
+        D: normalize(r.D), E: normalize(r.E),
+        ans: normalize(r.Jawaban || r.JAWABAN).toUpperCase(),
+        exp: normalize(r.Pembahasan || r.PEMBAHASAN)
+      };
+    }).filter(Boolean);
+
+    window.__BANK_READY = true;
+    window.__DB_SOURCE = fileOverride ? "LOCAL" : "ONLINE";
+    console.info("✅ DATABASE EXCEL BERHASIL DIMUAT");
+    console.info("📁 File:", DB_FILE_NAME);
+    console.info("📊 Total soal:", BANK.length);
+    console.info("📍 Sumber:", window.__DB_SOURCE);
+
+    if(typeof updateDatabaseInfo === "function") updateDatabaseInfo();
+    return BANK;
+  }catch(err){
+    window.__BANK_READY = false;
+    console.error("❌ DATABASE EXCEL GAGAL DIMUAT:", err);
+    throw err;
+  }
 }
 
 
@@ -475,6 +555,19 @@ function makeExam(mode){
 }
 
 async function start(mode){
+  if(!window.__BANK_READY){
+    try{
+      await loadBankFromExcel();
+    }catch(e){
+      const local = document.getElementById("localExcelInput");
+      alert("DATABASE EXCEL BELUM TERBACA.\n\n" +
+            "Jika online: pastikan Excel berada satu folder dengan index.html.\n" +
+            "Jika lokal: klik Power By Wak Dit B@-it | @2026 → PILIH DATABASE EXCEL LOKAL.");
+      if(local) local.click();
+      return;
+    }
+  }
+
   const name = $("name").value.trim();
   if(!name){ alert("Silakan isi Nama Peserta terlebih dahulu."); $("name").focus(); return; }
 
@@ -669,7 +762,7 @@ function updateDatabaseInfo(){
   BANK.forEach(q=>{
     const c=cats[q.cat]; if(!c) return;
     c.total++;
-    const lv=String(q.diff||"").toLowerCase();
+    const lv=String(q.level||"").toLowerCase();
     if(lv==="mudah"){c.easy++;levels.Mudah++;}
     else if(lv==="sedang"){c.medium++;levels.Sedang++;}
     else if(lv==="sulit"){c.hard++;levels.Sulit++;}
@@ -714,6 +807,40 @@ $("infoClose").addEventListener("click",closeInfoModal);
 $("infoModal").addEventListener("click",e=>{if(e.target===$("infoModal")) closeInfoModal();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").classList.contains("hidden")) closeInfoModal();});
 
+(function(){
+  const input = document.getElementById("localExcelInput");
+  const btn = document.getElementById("chooseLocalExcel");
+  if(!input || !btn) return;
+  btn.addEventListener("click",()=>input.click());
+  input.addEventListener("change",async()=>{
+    const file = input.files && input.files[0];
+    if(!file) return;
+    try{
+      BANK = [];
+      window.__BANK_READY = false;
+      await loadBankFromExcel(file);
+      updateDatabaseInfo();
+      const status = document.getElementById("dbStatus");
+      if(status){
+        status.className="db-status";
+        status.textContent="🟢 DATABASE LOKAL TERHUBUNG";
+      }
+      alert("✅ DATABASE LOKAL BERHASIL DIBACA!\n\nFile: " + file.name + "\nJumlah soal: " + BANK.length.toLocaleString("id-ID"));
+    }catch(e){
+      console.error(e);
+      const status = document.getElementById("dbStatus");
+      if(status){
+        status.className="db-status error";
+        status.textContent="🔴 DATABASE GAGAL DIBACA";
+      }
+      alert("❌ Database Excel gagal dibaca.\nPastikan file Excel memiliki sheet BANK_SOAL dan kolom: ID, Kategori, Tingkat, Soal, A, B, C, D, E, Jawaban, Pembahasan.");
+    }
+  });
+})();
+
+
+updateLocalDbButtonVisibility();
 </script>
+
 </body>
 </html>
