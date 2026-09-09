@@ -15,7 +15,42 @@ body{
 button,input{font:inherit}
 .hidden{display:none!important}
 .app{min-height:100vh}
-.topbar{background:linear-gradient(135deg,#082b59,#0b4d8a);color:#fff;padding:18px 28px;box-shadow:0 3px 12px #0002}
+/* ===== HEADER GAMBAR IPDN 2026 ===== */
+/* ===== HEADER GAMBAR IPDN 2026 ===== */
+.topbar{
+  position:relative;
+  width:100%;
+  height:150px;
+  padding:0;
+  margin:0;
+  background:transparent;
+  overflow:hidden;
+  line-height:0;
+}
+
+.header-image{
+  display:block;
+  width:100%;
+  height:150px;
+  margin:0;
+  padding:0;
+  object-fit:cover;
+  object-position:center 40%;
+}
+
+/* HP */
+@media(max-width:700px){
+  .topbar{
+    height:85px;
+  }
+
+  .header-image{
+  width:100%;
+  height:85px;
+  object-fit:cover;
+  object-position:center top;
+}
+}
 .brand{max-width:1180px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .brand h1{margin:0;font-size:20px}.brand small{opacity:.8}
 .main{max-width:1180px;margin:24px auto;padding:0 16px}
@@ -32,9 +67,136 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .btn{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;color:#fff;background:#0b4d8a}
 .btn:hover{filter:brightness(1.06)}.btn.green{background:#159447}.btn.red{background:#c73535}.btn.gold{background:#a87400}
 .note{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f4f8fc;color:#536477;font-size:13px}
-.exam-head{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #dbe4ed;box-shadow:0 3px 12px #0001}
-.exam-head-in{max-width:1180px;margin:auto;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.exam-title{font-weight:800;color:#0b4d8a}.timer{font-size:24px;font-weight:800;color:#a32020;background:#fff2f2;padding:7px 12px;border-radius:9px}
+.exam-head{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+  padding:8px 16px;
+}
+
+.exam-head-in{
+  max-width:1180px;
+  margin:auto;
+  min-height:82px;
+  padding:12px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+
+  background:linear-gradient(135deg,#780000 0%,#c20f1b 35%,#d4af37 68%,#aeb4ba 100%);
+  border:2px solid #d4af37;
+  border-radius:22px;
+  box-shadow:
+    0 5px 18px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.7),
+    inset 0 -2px 5px rgba(0,0,0,.18);
+}
+.exam-title{
+  font-size:25px;
+  font-weight:900;
+  color:#fff;
+  letter-spacing:1px;
+  text-shadow:
+    0 2px 0 #7a0000,
+    0 3px 5px rgba(0,0,0,.65),
+    0 0 8px rgba(255,215,80,.55);
+  white-space:nowrap;
+}
+
+.exam-info-left{
+  display:flex;
+  align-items:center;
+  gap:28px;
+  flex:1;
+}
+
+.exam-mode{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.exam-mode-icon{
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:linear-gradient(145deg,#0b65ad,#063d75);
+  border:2px solid #fff;
+  color:#fff;
+  font-size:25px;
+  font-weight:900;
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.45),
+    inset 0 1px 2px rgba(255,255,255,.6);
+}
+
+.exam-participant{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding-left:26px;
+  border-left:2px solid rgba(255,255,255,.65);
+}
+
+.participant-icon{
+  width:45px;
+  height:45px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:linear-gradient(145deg,#fff1a8,#d4af37,#8a6500);
+  border:2px solid #fff;
+  color:#fff;
+  font-size:22px;
+  font-weight:900;
+  box-shadow:
+    0 3px 8px rgba(0,0,0,.45),
+    inset 0 1px 2px rgba(255,255,255,.8);
+}
+
+.participant-label{
+  font-size:13px;
+  font-weight:900;
+  color:#fff;
+  letter-spacing:.5px;
+  text-shadow:0 2px 3px rgba(0,0,0,.55);
+  margin-bottom:2px;
+}
+
+.exam-participant small{
+  display:block;
+  font-size:20px;
+  font-weight:900;
+  color:#ffe58a;
+  text-shadow:
+    0 2px 3px rgba(0,0,0,.7),
+    0 0 6px rgba(255,215,80,.5);
+}
+
+
+
+#soundToggle{
+  min-width:54px !important;
+  height:54px;
+  padding:8px 12px !important;
+  border-radius:15px !important;
+  border:2px solid rgba(255,255,255,.75) !important;
+  background:linear-gradient(145deg,#0b65ad,#073f78) !important;
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.35),
+    inset 0 1px 2px rgba(255,255,255,.45);
+  font-size:22px;
+  text-shadow:0 2px 3px rgba(0,0,0,.6);
+}
+.timer{font-size:24px;font-weight:800;color:#a32020;background:#fff2f2;padding:7px 12px;border-radius:9px}
 .exam-wrap{max-width:1180px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:1fr 300px;gap:18px}
 .question{padding:24px}.qmeta{display:flex;justify-content:space-between;color:#64748b;font-size:13px;margin-bottom:15px}
 .qtext{font-size:18px;line-height:1.6;font-weight:700;margin-bottom:18px}
@@ -283,13 +445,15 @@ body.result-active .result{
 <body>
 <input id="localExcelInput" type="file" accept=".xlsx,.xls" style="display:none" aria-hidden="true">
 <div class="app">
+  
   <div class="topbar">
-    <div class="brand">
-      <div><h1>SIMULASI SKD-IPDN-CPNS 2026</h1><small>Computer Assisted Test — Mode latihan mandiri</small></div>
-      <div>CAT</div>
-    </div>
-  </div>
-
+  <img
+    src="header-ipdn-2026.png"
+    class="header-image"
+    alt="SIMULASI SKD IPDN 2026"
+  >
+</div>
+  
   <section id="home" class="main">
     <div class="card login">
       <h2>Persiapan Peserta</h2>
@@ -322,7 +486,22 @@ body.result-active .result{
   <section id="exam" class="hidden">
     <div class="exam-head">
       <div class="exam-head-in">
-        <div><div id="examTitle" class="exam-title">SIMULASI CAT</div><small id="examName"></small></div>
+        <div class="exam-info-left">
+
+  <div class="exam-mode">
+    <span class="exam-mode-icon">▣</span>
+    <div id="examTitle" class="exam-title">SIMULASI CAT</div>
+  </div>
+
+  <div class="exam-participant">
+    <span class="participant-icon">●</span>
+    <div>
+      <div class="participant-label">Nama Peserta</div>
+      <small id="examName"></small>
+    </div>
+  </div>
+
+</div>
         <div style="display:flex;align-items:center;gap:8px">
           <button id="soundToggle" class="btn" type="button" title="Aktifkan/nonaktifkan suara" style="padding:8px 10px;min-width:44px">🔊</button>
           <div id="timer" class="timer">100:00</div>
