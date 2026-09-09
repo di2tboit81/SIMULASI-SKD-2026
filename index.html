@@ -153,6 +153,22 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 @media(max-width:650px){.info-maker{grid-template-columns:1fr}.info-top{padding:22px 50px 18px}.info-body{padding:15px}.db-grid{grid-template-columns:1fr 1fr}.db-total strong{font-size:23px}.info-title{font-size:18px}}
 </style>
 
+
+<style>
+/* LOGIN DATABASE EXCEL — gaya disamakan dengan panel informasi */
+.login-modal{position:fixed;inset:0;z-index:10001;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(4,10,20,.80);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.login-modal.hidden{display:none!important}
+.login-box{position:relative;width:min(430px,100%);border:1px solid rgba(255,215,90,.92);border-radius:24px;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#f4f5f6 34%,#e1e4e7 68%,#fff8df 100%);box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,0 0 20px rgba(255,215,0,.55),0 0 44px rgba(199,53,53,.30),0 24px 80px rgba(0,0,0,.58);animation:loginPop .32s ease-out}
+@keyframes loginPop{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.login-top{position:relative;padding:24px 50px 20px;text-align:center;color:#fff;background:linear-gradient(135deg,#780000,#c20f1b 36%,#d4af37 67%,#9da2a8 88%,#fff);box-shadow:0 5px 18px rgba(115,0,0,.25)}
+.login-top:after{content:"";position:absolute;left:9%;right:9%;bottom:0;height:3px;background:linear-gradient(90deg,transparent,#fff,#d4af37,#fff,transparent);box-shadow:0 0 10px rgba(255,255,255,.9)}
+.login-emblem{font-size:34px;filter:drop-shadow(0 0 8px rgba(255,255,255,.9));margin-bottom:3px}.login-title{margin:0;font-size:21px;font-weight:900;letter-spacing:1px;text-shadow:0 2px 5px rgba(0,0,0,.35)}.login-sub{margin:6px 0 0;font-size:11px;letter-spacing:1.2px;font-weight:800}
+.login-close{position:absolute;right:14px;top:12px;width:37px;height:37px;border:1px solid rgba(255,255,255,.75);border-radius:50%;background:rgba(80,0,0,.45);color:#fff;font-size:21px;font-weight:900;cursor:pointer;z-index:2}.login-close:hover{transform:rotate(90deg) scale(1.05);background:#8f0000}
+.login-body{padding:22px}.login-note{text-align:center;color:#69717a;font-size:12px;line-height:1.55;margin:0 0 17px}.login-field{margin-bottom:14px}.login-field label{display:block;margin-bottom:6px;font-size:11px;color:#69717a;font-weight:900;letter-spacing:1px;text-transform:uppercase}.login-input{width:100%;box-sizing:border-box;padding:12px 13px;border:1px solid #bcc2c8;border-radius:12px;background:rgba(255,255,255,.94);color:#202a35;font-size:14px;font-weight:700;outline:none;box-shadow:inset 0 1px 5px rgba(0,0,0,.05),0 0 0 0 rgba(212,175,55,0)}.login-input:focus{border-color:#d4af37;box-shadow:0 0 0 3px rgba(212,175,55,.18),inset 0 1px 5px rgba(0,0,0,.05)}
+.login-actions{display:flex;gap:10px;margin-top:18px}.login-btn{flex:1;border:1px solid rgba(255,255,255,.7);border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer}.login-btn.cancel{background:linear-gradient(135deg,#8b9096,#c6c9cc);color:#fff;box-shadow:0 0 10px rgba(120,120,120,.22)}.login-btn.submit{background:linear-gradient(135deg,#8b0000,#c20f1b 45%,#d4af37);color:#fff;box-shadow:0 0 15px rgba(212,175,55,.35)}.login-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.login-error{min-height:18px;margin-top:10px;text-align:center;color:#b3131d;font-size:12px;font-weight:900}.login-foot{text-align:center;margin-top:14px;padding-top:12px;border-top:1px dashed #b7bbc0;color:#8a9097;font-size:10px}
+</style>
+
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -279,6 +295,37 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 </div>
 <div id="powerFooter" class="footer" title="Buka informasi aplikasi dan database">Power By Wak Dit B@-it | @2026</div>
 
+
+<div id="loginModal" class="login-modal hidden" aria-hidden="true">
+  <div class="login-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <div class="login-top">
+      <button id="loginClose" class="login-close" type="button" aria-label="Tutup">×</button>
+      <div class="login-emblem">🔐</div>
+      <h2 id="loginTitle" class="login-title">AKSES DATABASE EXCEL</h2>
+      <div class="login-sub">LOGIN ADMINISTRATOR • LOCAL DATABASE</div>
+    </div>
+    <div class="login-body">
+      <p class="login-note">Masukkan user dan password untuk membuka pemilihan database Excel lokal.</p>
+      <form id="loginForm" autocomplete="off">
+        <div class="login-field">
+          <label for="loginUser">👤 USER</label>
+          <input id="loginUser" class="login-input" type="text" placeholder="Masukkan user" autocomplete="username" required>
+        </div>
+        <div class="login-field">
+          <label for="loginPass">🔑 PASSWORD</label>
+          <input id="loginPass" class="login-input" type="password" placeholder="Masukkan password" autocomplete="current-password" required>
+        </div>
+        <div id="loginError" class="login-error" aria-live="polite"></div>
+        <div class="login-actions">
+          <button id="loginCancel" class="login-btn cancel" type="button">BATAL</button>
+          <button class="login-btn submit" type="submit">🔓 LOGIN</button>
+        </div>
+      </form>
+      <div class="login-foot">Akses ini hanya untuk membuka pemilihan file database Excel lokal.</div>
+    </div>
+  </div>
+</div>
+
 <div id="infoModal" class="info-modal hidden" aria-hidden="true">
   <div class="info-box" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
     <div class="info-top">
@@ -313,7 +360,7 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
         </table>
       </div>
       <div style="display:flex;justify-content:center;margin-top:16px;">
-        <button id="chooseLocalExcel" type="button" class="info-local-btn" class=">💻 PILIH DATABASE EXCEL LOKAL</button>
+        <button id="chooseLocalExcel" type="button" class="info-local-btn local-db-only">💻 PILIH DATABASE EXCEL LOKAL</button>
       </div>
       <div style="text-align:center;margin-top:7px;font-size:11px;color:#69717a;line-height:1.5">
         Pengujian komputer: pilih file Excel secara manual. Saat online, database dibaca otomatis dari server/GitHub.
@@ -402,15 +449,24 @@ async function loadBankFromExcel(fileOverride=null){
       const question = normalize(r.Soal || r.soal || r.Question || r.question);
       if(!question) return null;
 
+      const opts = [
+        normalize(r.A), normalize(r.B), normalize(r.C),
+        normalize(r.D), normalize(r.E)
+      ];
+      const answerLetter = normalize(r.Jawaban || r.JAWABAN).toUpperCase().charAt(0);
+      const answerIndex = "ABCDE".indexOf(answerLetter);
+      if(!["TWK","TIU","TKP"].includes(
+        normalize(r.Kategori || r.KATEGORI || r.KategoriSoal).toUpperCase()
+      ) || !question || opts.some(v=>!v) || answerIndex < 0) return null;
+
       return {
         id: normalize(r.ID || r.Id || r.id) || ("EXCEL-"+(idx+1)),
         cat: normalize(r.Kategori || r.KATEGORI || r.KategoriSoal).toUpperCase(),
         sub: normalize(r.Submateri || r.SUBMATERI),
         level: normalize(r.Tingkat || r.TINGKAT).toLowerCase(),
         q: question,
-        A: normalize(r.A), B: normalize(r.B), C: normalize(r.C),
-        D: normalize(r.D), E: normalize(r.E),
-        ans: normalize(r.Jawaban || r.JAWABAN).toUpperCase(),
+        opts,
+        ans: answerIndex,
         exp: normalize(r.Pembahasan || r.PEMBAHASAN)
       };
     }).filter(Boolean);
@@ -528,7 +584,7 @@ function makeExam(mode){
   const out=[];
 
   for(const cat of ["TWK","TIU","TKP"]){
-    const pool=BANK.filter(x=>x.cat===cat && String(x.diff).toLowerCase()===level.toLowerCase());
+    const pool=BANK.filter(x=>x.cat===cat && String(x.level).toLowerCase()===level.toLowerCase());
     const key="skd_queue_excel_"+level.toLowerCase()+"_"+cat;
     if(pool.length<need[cat]) return [];
 
@@ -810,8 +866,54 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").c
 (function(){
   const input = document.getElementById("localExcelInput");
   const btn = document.getElementById("chooseLocalExcel");
-  if(!input || !btn) return;
-  btn.addEventListener("click",()=>input.click());
+  const loginModal = document.getElementById("loginModal");
+  const loginForm = document.getElementById("loginForm");
+  const loginUser = document.getElementById("loginUser");
+  const loginPass = document.getElementById("loginPass");
+  const loginError = document.getElementById("loginError");
+  const loginClose = document.getElementById("loginClose");
+  const loginCancel = document.getElementById("loginCancel");
+  if(!input || !btn || !loginModal || !loginForm) return;
+
+  /* KREDENSIAL LOGIN DATABASE LOKAL — tidak mengubah database/soal */
+  const LOCAL_DB_USERNAME = "admin";
+  const LOCAL_DB_PASSWORD = "12345";
+
+  function openLogin(){
+    loginModal.classList.remove("hidden");
+    loginModal.setAttribute("aria-hidden","false");
+    loginError.textContent="";
+    loginUser.value="";
+    loginPass.value="";
+    setTimeout(()=>loginUser.focus(),80);
+  }
+  function closeLogin(){
+    loginModal.classList.add("hidden");
+    loginModal.setAttribute("aria-hidden","true");
+    loginError.textContent="";
+  }
+
+  btn.addEventListener("click",openLogin);
+  loginClose.addEventListener("click",closeLogin);
+  loginCancel.addEventListener("click",closeLogin);
+  loginModal.addEventListener("click",e=>{if(e.target===loginModal) closeLogin();});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape" && !loginModal.classList.contains("hidden")) closeLogin();});
+
+  loginForm.addEventListener("submit",e=>{
+    e.preventDefault();
+    const u=loginUser.value.trim();
+    const p=loginPass.value;
+    if(u===LOCAL_DB_USERNAME && p===LOCAL_DB_PASSWORD){
+      closeLogin();
+      input.value="";
+      input.click();
+    }else{
+      loginError.textContent="❌ USER atau PASSWORD salah.";
+      loginPass.value="";
+      loginPass.focus();
+    }
+  });
+
   input.addEventListener("change",async()=>{
     const file = input.files && input.files[0];
     if(!file) return;
@@ -840,6 +942,13 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").c
 
 
 updateLocalDbButtonVisibility();
+
+/* ================= TOMBOL MODE ================= */
+document.querySelectorAll("button.start[data-mode]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    start(btn.dataset.mode);
+  });
+});
 </script>
 
 </body>
