@@ -216,9 +216,232 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .exp{color:#526273;font-size:14px;margin-top:8px}
 .footer{text-align:center;color:#6a7887;padding:28px 10px;font-size:13px}
 @media(max-width:850px){
- .modes,.scoregrid{grid-template-columns:1fr}
- .exam-wrap{grid-template-columns:1fr}.sidebar{position:static}
- .exam-head-in{flex-wrap:wrap}.timer{font-size:20px}
+  .modes,
+  .scoregrid{
+    grid-template-columns:1fr;
+  }
+
+  .exam-wrap{
+    grid-template-columns:1fr;
+    width:100%;
+    padding:0 12px;
+  }
+
+  .sidebar{
+    position:static;
+    width:100%;
+  }
+
+  .exam-head-in{
+    flex-wrap:wrap;
+    width:100%;
+    min-width:0;
+  }
+
+  .exam-info-left,
+  .exam-participant,
+  .exam-participant > div{
+    min-width:0;
+    max-width:100%;
+  }
+
+  .exam-participant small{
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+
+  .exam-title{
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+
+  .question{
+    width:100%;
+    min-width:0;
+  }
+
+  .qtext,
+  .opt{
+    max-width:100%;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+  }
+
+  .opt{
+    width:100%;
+  }
+
+  .actions{
+    width:100%;
+    min-width:0;
+  }
+
+  .actions .btn{
+    min-width:0;
+    flex:1 1 0;
+  }
+
+  .grid{
+    width:100%;
+    min-width:0;
+  }
+}
+
+@media(max-width:600px){
+
+  .main{
+    width:100%;
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .login{
+    width:100%;
+    margin:14px auto;
+    padding:18px 14px;
+  }
+
+  .mode{
+    width:100%;
+  }
+
+  /* HEADER UJIAN HP */
+  .exam-head{
+    padding:5px 6px;
+  }
+
+  .exam-head-in{
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+    padding:10px;
+  }
+
+  .exam-info-left{
+    width:100%;
+    flex-direction:column;
+    align-items:stretch;
+    gap:10px;
+  }
+
+  .exam-mode{
+    width:100%;
+    min-width:0;
+  }
+
+  .exam-title{
+    font-size:18px;
+    line-height:1.2;
+    white-space:normal;
+  }
+
+  .exam-participant{
+    width:100%;
+    padding-left:0;
+    padding-top:9px;
+    border-left:0;
+    border-top:1px solid rgba(255,255,255,.45);
+  }
+
+  .exam-participant small{
+    font-size:16px;
+    line-height:1.25;
+  }
+
+  .exam-head-in > div:last-child{
+    width:100%;
+    justify-content:space-between;
+  }
+
+  /* KOTAK SOAL */
+  .exam-wrap{
+    width:100%;
+    padding:0 8px;
+    margin:10px auto;
+  }
+
+  .question{
+    width:100%;
+    padding:15px 12px;
+  }
+
+  .qtext{
+    font-size:16px;
+    line-height:1.55;
+  }
+
+  /* PILIHAN JAWABAN */
+  .opt{
+    width:100%;
+    padding:11px 10px;
+    font-size:14px;
+    line-height:1.45;
+  }
+
+  /* TOMBOL */
+  .actions{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:6px;
+  }
+
+  .actions .btn{
+    width:100%;
+    padding:10px 4px;
+    font-size:11px;
+  }
+
+  /* NOMOR SOAL */
+  .sidebar{
+    width:100%;
+    padding:14px 12px;
+  }
+
+  .grid{
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:5px;
+  }
+
+  .num{
+    min-width:0;
+    width:100%;
+    padding:8px 0;
+    font-size:12px;
+  }
+}
+
+@media(max-width:380px){
+
+  .exam-title{
+    font-size:16px;
+  }
+
+  .exam-participant small{
+    font-size:14px;
+  }
+
+  .question{
+    padding:13px 10px;
+  }
+
+  .qtext{
+    font-size:15px;
+  }
+
+  .opt{
+    font-size:13px;
+    padding:10px 8px;
+  }
+
+  .actions .btn{
+    font-size:10px;
+    padding:9px 2px;
+  }
+
+  .num{
+    font-size:11px;
+    padding:7px 0;
+  }
 }
 
 /* LOCAL DATABASE BUTTON:
