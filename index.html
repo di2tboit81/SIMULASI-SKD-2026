@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Simulasi SKD IPDN 2026 — CAT</title>
+<title>Simulasi SKD IPDN CPNS 2026 — CAT</title>
 <style>
 *{box-sizing:border-box}
 body{
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
-  background:#eef3f8 url("background.jpg") center center / cover fixed no-repeat;
+  background:#eef3f8 url("background.jpg") center center / cover no-repeat;
   color:#142033
 }
 button,input{font:inherit}
@@ -45,7 +45,7 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .sidebar{padding:18px;height:max-content;position:sticky;top:85px}
 .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin-top:12px}
 .num{padding:9px 0;border:1px solid #cbd6e2;background:#fff;border-radius:7px;cursor:pointer;font-weight:700}
-.num.answered{background:#dff2e5;border-color:#75b98b}.num.flag{outline:3px solid #ffd36a}.num.current{background:#0b4d8a;color:#fff;border-color:#0b4d8a}
+.num.answered{background:#146b3a !important;border-color:#0d512b !important;color:#fff !important}.num.flag:not(.answered){background:#b36b00 !important;border-color:#7a4800 !important;color:#fff !important}.num.current{background:#0b4d8a;color:#fff;border-color:#0b4d8a}
 .legend{font-size:12px;color:#657487;line-height:1.7;margin-top:12px}
 .result{padding:28px}.scoregrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
 .score{padding:18px;border-radius:12px;background:#f2f7fb;text-align:center}.score b{display:block;font-size:28px;color:#0b4d8a}
@@ -169,6 +169,16 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .login-error{min-height:18px;margin-top:10px;text-align:center;color:#b3131d;font-size:12px;font-weight:900}.login-foot{text-align:center;margin-top:14px;padding-top:12px;border-top:1px dashed #b7bbc0;color:#8a9097;font-size:10px}
 </style>
 
+<style>
+/* NOTIFIKASI APLIKASI — semua pesan internal memakai kotak aplikasi, bukan alert/confirm browser */
+.app-modal{position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(4,10,20,.78);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.app-modal.hidden{display:none!important}
+.app-dialog{width:min(520px,100%);border:1px solid rgba(255,215,90,.92);border-radius:22px;overflow:hidden;background:linear-gradient(145deg,#fff,#eef0f2 58%,#fff8df);box-shadow:0 0 20px rgba(255,215,0,.45),0 0 45px rgba(199,53,53,.25),0 24px 70px rgba(0,0,0,.55);animation:appDialogPop .25s ease-out}
+@keyframes appDialogPop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.app-dialog-top{padding:18px 22px;text-align:center;color:#fff;background:linear-gradient(135deg,#780000,#c20f1b 40%,#d4af37 72%,#9da2a8);position:relative}
+.app-dialog-top:after{content:"";position:absolute;left:10%;right:10%;bottom:0;height:3px;background:linear-gradient(90deg,transparent,#fff,#d4af37,#fff,transparent);box-shadow:0 0 9px #fff}
+.app-dialog-icon{font-size:30px;margin-bottom:3px}.app-dialog-title{margin:0;font-size:19px;font-weight:900;letter-spacing:.8px}.app-dialog-body{padding:22px;text-align:center;color:#27323d}.app-dialog-message{font-size:14px;line-height:1.65;font-weight:700;white-space:pre-line}.app-dialog-actions{display:flex;justify-content:center;gap:10px;margin-top:18px}.app-dialog-btn{min-width:120px;border:0;border-radius:11px;padding:11px 18px;font-weight:900;cursor:pointer}.app-dialog-btn.ok{color:#fff;background:linear-gradient(135deg,#8b0000,#c20f1b 45%,#d4af37)}.app-dialog-btn.cancel{color:#fff;background:linear-gradient(135deg,#8b9096,#c6c9cc)}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -205,13 +215,77 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 })();
 </script>
 
+<style>
+/* ================= SCROLL UJIAN =================
+   Scroll halaman tetap normal seperti biasa.
+   Tidak ada penguncian body, tidak ada inner-scroll, dan
+   tidak ada transform yang membuat halaman ikut bergerak saat pointer/mouse bergerak. */
+html{
+  overflow-x:hidden;
+  overflow-y:auto;
+  overflow-anchor:none;
+}
+body{
+  overflow:visible;
+  overflow-anchor:none;
+}
+#exam,#home,#result{
+  overflow-anchor:none;
+}
+body.exam-active{
+  position:static !important;
+  top:auto !important;
+  left:auto !important;
+  right:auto !important;
+  width:auto !important;
+  height:auto !important;
+  overflow:visible !important;
+  overscroll-behavior:auto !important;
+  touch-action:auto !important;
+}
+body.exam-active #exam{
+  min-height:0;
+  height:auto;
+  overflow:visible;
+}
+body.exam-active .exam-wrap{
+  height:auto;
+  max-height:none;
+  overflow:visible;
+  overscroll-behavior:auto;
+}
+body.exam-active .question,
+body.exam-active .sidebar{
+  overflow:visible;
+}
+body.exam-active .exam-head{
+  position:sticky;
+  top:0;
+}
+</style>
+
+<style>
+/* HASIL UJIAN — latar dibuat bersih agar teks tetap jelas */
+body.result-active{
+  background:#eef3f8 !important;
+  background-image:none !important;
+}
+body.result-active #result{
+  background:transparent;
+}
+body.result-active .result{
+  max-width:1180px;
+  margin-left:auto;
+  margin-right:auto;
+}
+</style>
 </head>
 <body>
 <input id="localExcelInput" type="file" accept=".xlsx,.xls" style="display:none" aria-hidden="true">
 <div class="app">
   <div class="topbar">
     <div class="brand">
-      <div><h1>SIMULASI SKD IPDN 2026</h1><small>Computer Assisted Test — Mode latihan mandiri</small></div>
+      <div><h1>SIMULASI SKD-IPDN-CPNS 2026</h1><small>Computer Assisted Test — Mode latihan mandiri</small></div>
       <div>CAT</div>
     </div>
   </div>
@@ -269,7 +343,7 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
       <aside class="card sidebar">
         <b>NOMOR SOAL</b>
         <div id="numbers" class="grid"></div>
-        <div class="legend">Hijau = sudah dijawab<br>Kuning = ditandai<br>Biru = soal aktif</div>
+        <div class="legend">Hijau gelap = sudah dijawab<br>Orange gelap = ditandai / dilewati<br>Biru = soal aktif dan belum dijawab</div>
         <button id="finish" class="btn red" style="width:100%;margin-top:16px">SELESAI / KUMPULKAN</button>
       </aside>
     </div>
@@ -301,12 +375,12 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
     <div class="login-top">
       <button id="loginClose" class="login-close" type="button" aria-label="Tutup">×</button>
       <div class="login-emblem">🔐</div>
-      <h2 id="loginTitle" class="login-title">AKSES DATABASE EXCEL</h2>
+      <h2 id="loginTitle" class="login-title">AKSES DATABASE B@-it</h2>
       <div class="login-sub">LOGIN ADMINISTRATOR • LOCAL DATABASE</div>
     </div>
     <div class="login-body">
-      <p class="login-note">Masukkan user dan password untuk membuka pemilihan database Excel lokal.</p>
-      <form id="loginForm" autocomplete="off">
+      <p class="login-note">Masukkan user dan password untuk membuka pemilihan database lokal.</p>
+      <form id="loginForm" autocomplete="off" novalidate>
         <div class="login-field">
           <label for="loginUser">👤 USER</label>
           <input id="loginUser" class="login-input" type="text" placeholder="Masukkan user" autocomplete="username" required>
@@ -321,7 +395,23 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
           <button class="login-btn submit" type="submit">🔓 LOGIN</button>
         </div>
       </form>
-      <div class="login-foot">Akses ini hanya untuk membuka pemilihan file database Excel lokal.</div>
+      <div class="login-foot">Akses ini hanya untuk membuka pemilihan file database lokal B@-it.</div>
+    </div>
+  </div>
+</div>
+
+<div id="appModal" class="app-modal hidden" aria-hidden="true">
+  <div class="app-dialog" role="dialog" aria-modal="true" aria-labelledby="appDialogTitle">
+    <div class="app-dialog-top">
+      <div id="appDialogIcon" class="app-dialog-icon">ℹ️</div>
+      <h2 id="appDialogTitle" class="app-dialog-title">INFORMASI APLIKASI</h2>
+    </div>
+    <div class="app-dialog-body">
+      <div id="appDialogMessage" class="app-dialog-message"></div>
+      <div class="app-dialog-actions">
+        <button id="appDialogCancel" class="app-dialog-btn cancel hidden" type="button">BATAL</button>
+        <button id="appDialogOk" class="app-dialog-btn ok" type="button">OK</button>
+      </div>
     </div>
   </div>
 </div>
@@ -332,7 +422,7 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
       <button id="infoClose" class="info-close" type="button" aria-label="Tutup">×</button>
       <div class="info-emblem">🏛️</div>
       <h2 id="infoTitle" class="info-title">INFORMASI APLIKASI</h2>
-      <div class="info-sub">SIMULASI SKD IPDN 2026 • CAT</div>
+      <div class="info-sub">SIMULASI SKD-IPDN-CPNS 2026 • CAT</div>
     </div>
     <div class="info-body">
       <div class="info-maker">
@@ -360,14 +450,14 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
         </table>
       </div>
       <div style="display:flex;justify-content:center;margin-top:16px;">
-        <button id="chooseLocalExcel" type="button" class="info-local-btn local-db-only">💻 PILIH DATABASE EXCEL LOKAL</button>
+        <button id="chooseLocalExcel" type="button" class="info-local-btn local-db-only">💻 PILIH DATABASE LOKAL B@-IT</button>
       </div>
       <div style="text-align:center;margin-top:7px;font-size:11px;color:#69717a;line-height:1.5">
-        Pengujian komputer: pilih file Excel secara manual. Saat online, database dibaca otomatis dari server/GitHub.
+        Pengujian komputer: pilih file B@-it secara manual. Saat online, database dibaca otomatis dari server.
       </div>
       <div class="info-foot">
-        <span class="shine-dot"></span> Database dibaca langsung dari file Excel yang ditempatkan bersama aplikasi.<br>
-        <b>Catatan:</b> angka di panel ini dihitung otomatis dari data yang berhasil dibaca, bukan ditulis manual di HTML.
+        <span class="shine-dot"></span> Database dibaca langsung dari file B@-it yang ditempatkan bersama aplikasi.<br>
+        <b>Catatan:</b> angka di panel ini dihitung otomatis dari data yang berhasil dibaca oleh DATABASE B@-IT.
       </div>
     </div>
   </div>
@@ -387,7 +477,7 @@ function updateLocalDbButtonVisibility(){
   const online = /^https?:$/i.test(location.protocol);
   btn.classList.toggle("online-hidden", online);
 }
-const DB_FILE_NAME = "Database_SIMULASI_SKD_IPDN_CPNS.xlsx";
+const DB_FILE_NAME = "Database_SIMULASI_SKD_IPDN_CPNS";
 let BANK = [];
 let bankLoadPromise = null;
 
@@ -395,6 +485,17 @@ function normalizeQuestion(text){
   return String(text ?? "")
     .toLowerCase()
     .replace(/\s+/g," ")
+    .trim();
+}
+
+function cleanQuestionDisplay(text){
+  return String(text ?? "")
+    // Hapus semua keterangan varian di dalam tanda kurung.
+    .replace(/\s*\(\s*varian\b[^)]*\)/gi, "")
+    // Hapus SEMUA isi metadata yang berada di dalam tanda kurung siku [ ... ].
+    // Contoh: [P-55], [TKP-232], [TIU-001], [kode apa pun], dll.
+    .replace(/\s*\[[^\]]*\]/g, "")
+    .replace(/\s{2,}/g, " ")
     .trim();
 }
 
@@ -473,7 +574,7 @@ async function loadBankFromExcel(fileOverride=null){
 
     window.__BANK_READY = true;
     window.__DB_SOURCE = fileOverride ? "LOCAL" : "ONLINE";
-    console.info("✅ DATABASE EXCEL BERHASIL DIMUAT");
+    console.info("✅ DATABASE B@-IT BERHASIL DIMUAT");
     console.info("📁 File:", DB_FILE_NAME);
     console.info("📊 Total soal:", BANK.length);
     console.info("📍 Sumber:", window.__DB_SOURCE);
@@ -482,7 +583,7 @@ async function loadBankFromExcel(fileOverride=null){
     return BANK;
   }catch(err){
     window.__BANK_READY = false;
-    console.error("❌ DATABASE EXCEL GAGAL DIMUAT:", err);
+    console.error("❌ DATABASE B@-IT GAGAL DIMUAT:", err);
     throw err;
   }
 }
@@ -492,8 +593,125 @@ let state = {
   name:"", mode:"", questions:[], answers:[], flags:[], index:0, seconds:0, timer:null
 };
 
+/* ================= SIMPAN SESI UJIAN =================
+   Saat refresh/reload, posisi, jawaban, tanda, dan waktu dipulihkan.
+   Yang disimpan hanya ID soal + status pengerjaan, bukan isi soal.
+   Isi soal tetap wajib dibaca kembali dari DATABASE EXCEL. */
+const EXAM_SESSION_KEY = "SKD_IPDN_ACTIVE_EXAM_V1";
+
+function saveExamSession(){
+  if(!state || !state.mode || !state.questions || !state.questions.length) return;
+  try{
+    localStorage.setItem(EXAM_SESSION_KEY, JSON.stringify({
+      name:state.name,
+      mode:state.mode,
+      questionIds:state.questions.map(q=>String(q.id)),
+      answers:state.answers,
+      flags:state.flags,
+      index:state.index,
+      seconds:state.seconds
+    }));
+  }catch(e){}
+}
+
+function clearExamSession(){
+  try{ localStorage.removeItem(EXAM_SESSION_KEY); }catch(e){}
+}
+
+let examBodyScrollY=0;
+function setExamActive(active){
+  if(active){
+    examBodyScrollY=window.scrollY||0;
+    document.body.classList.add("exam-active");
+    document.documentElement.classList.add("exam-active");
+  }else{
+    document.body.classList.remove("exam-active");
+    document.documentElement.classList.remove("exam-active");
+    window.scrollTo(0,0);
+  }
+}
+
+async function restoreExamSession(){
+  let saved=null;
+  try{ saved=JSON.parse(localStorage.getItem(EXAM_SESSION_KEY)||"null"); }catch(e){ saved=null; }
+  if(!saved || !saved.mode || !Array.isArray(saved.questionIds) || !saved.questionIds.length) return false;
+
+  try{
+    if(!window.__BANK_READY) await loadBankFromExcel();
+    const byId=new Map(BANK.map(q=>[String(q.id),q]));
+    const questions=saved.questionIds.map(id=>byId.get(String(id))).filter(Boolean);
+
+    if(questions.length!==saved.questionIds.length){
+      clearExamSession();
+      appNotify("Database berubah atau beberapa soal dari sesi sebelumnya tidak ditemukan. Sesi lama dibatalkan agar tidak terjadi ketidaksesuaian soal.","SESI LAMA TIDAK DAPAT DIPULIHKAN","⚠️");
+      return false;
+    }
+
+    state={
+      name:String(saved.name||""),
+      mode:String(saved.mode),
+      questions,
+      answers:Array.isArray(saved.answers)&&saved.answers.length===questions.length ? saved.answers : Array(questions.length).fill(null),
+      flags:Array.isArray(saved.flags)&&saved.flags.length===questions.length ? saved.flags : Array(questions.length).fill(false),
+      index:Math.min(Math.max(Number(saved.index)||0,0),questions.length-1),
+      seconds:Number(saved.seconds)||0,
+      timer:null
+    };
+
+    $("home").classList.add("hidden");
+    $("result").classList.add("hidden");
+    document.body.classList.remove("result-active");
+    $("exam").classList.remove("hidden");
+    $("examName").textContent=state.name;
+    $("examTitle").textContent=state.mode==="practice"?"LATIHAN SKD":state.mode==="simulation"?"SIMULASI CAT":"UJIAN NYATA";
+    setExamActive(true);
+
+    if(state.seconds>0){
+      $("timer").classList.remove("hidden");
+      tick();
+      state.timer=setInterval(tick,1000);
+    }else{
+      $("timer").classList.add("hidden");
+    }
+    render();
+    return true;
+  }catch(e){
+    console.error("Gagal memulihkan sesi:",e);
+    if(location.protocol==="file:"){
+      appNotify("Sesi ujian Anda masih tersimpan. Aplikasi ini tidak dapat membuka kembali file lokal secara otomatis. Silakan pilih DATABASE LOKAL B@-IT sekali lagi; setelah database terbaca, sesi dan jawaban akan dilanjutkan.","SESI UJIAN TERSIMPAN","💾");
+    }
+    return false;
+  }
+}
+
 const $ = id => document.getElementById(id);
 const shuffle = a => [...a].sort(()=>Math.random()-0.5);
+
+/* ================= PESAN APLIKASI ================= */
+const appModal=$("appModal"), appDialogTitle=$("appDialogTitle"), appDialogMessage=$("appDialogMessage"), appDialogIcon=$("appDialogIcon"), appDialogOk=$("appDialogOk"), appDialogCancel=$("appDialogCancel");
+let appDialogCallback=null, appDialogCancelCallback=null;
+function closeAppModal(){
+  if(!appModal) return;
+  appModal.classList.add("hidden");
+  appModal.setAttribute("aria-hidden","true");
+  appDialogCallback=null; appDialogCancelCallback=null;
+}
+function appNotify(message,title="INFORMASI APLIKASI",icon="ℹ️",callback=null){
+  appDialogTitle.textContent=title; appDialogMessage.textContent=message; appDialogIcon.textContent=icon;
+  appDialogCancel.classList.add("hidden"); appDialogOk.textContent="OK";
+  appDialogCallback=callback; appDialogCancelCallback=null;
+  appModal.classList.remove("hidden"); appModal.setAttribute("aria-hidden","false");
+}
+function appConfirm(message,title="KONFIRMASI",icon="❓",onYes=null){
+  appDialogTitle.textContent=title; appDialogMessage.textContent=message; appDialogIcon.textContent=icon;
+  appDialogCancel.classList.remove("hidden"); appDialogOk.textContent="YA, LANJUTKAN";
+  appDialogCallback=onYes; appDialogCancelCallback=null;
+  appModal.classList.remove("hidden"); appModal.setAttribute("aria-hidden","false");
+}
+appDialogOk.addEventListener("click",()=>{const cb=appDialogCallback;closeAppModal();if(cb)cb();});
+appDialogCancel.addEventListener("click",closeAppModal);
+appModal.addEventListener("click",e=>{if(e.target===appModal)closeAppModal();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape" && !appModal.classList.contains("hidden"))closeAppModal();});
 
 /* ================= AUDIO UJIAN =================
    Semua suara dibuat langsung oleh browser, tanpa file audio eksternal.
@@ -581,33 +799,132 @@ function makeExam(mode){
   const need = mode==="practice" ? {TWK:7,TIU:7,TKP:6} : {TWK:30,TIU:35,TKP:45};
   const levelByMode = {practice:"Mudah", simulation:"Sedang", real:"Sulit"};
   const level = levelByMode[mode] || "Sedang";
+  const categories=["TWK","TIU","TKP"];
+  const selectedQuestions=new Set();
   const out=[];
 
-  for(const cat of ["TWK","TIU","TKP"]){
-    const pool=BANK.filter(x=>x.cat===cat && String(x.level).toLowerCase()===level.toLowerCase());
-    const key="skd_queue_excel_"+level.toLowerCase()+"_"+cat;
-    if(pool.length<need[cat]) return [];
+  /*
+     DATABASE TETAP 100% DARI EXCEL.
+     Saat membuat satu paket ujian:
+     - pertanyaan yang sama hanya boleh muncul sekali;
+     - target komposisi kategori dipenuhi selama stok unik kategori mencukupi;
+     - jika stok unik suatu kategori kurang, kekurangannya otomatis diambil
+       dari kategori lain pada LEVEL YANG SAMA agar total tetap 20/110;
+     - tidak ada soal yang ditambahkan ke HTML.
+  */
+  const questionKey = item => normalizeQuestion(cleanQuestionDisplay(item.q));
 
+  const uniqueByQuestion = items => {
+    const seen=new Set(), result=[];
+    for(const item of items){
+      const key=questionKey(item);
+      if(!key || seen.has(key)) continue;
+      seen.add(key);
+      result.push(item);
+    }
+    return result;
+  };
+
+  const randomize = arr => {
+    const a=[...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  };
+
+  const pools={};
+  const queues={};
+
+  /* Siapkan pool unik per kategori dari Excel, tetap pada level yang dipilih. */
+  for(const cat of categories){
+    const rawPool=BANK.filter(x=>
+      x.cat===cat &&
+      String(x.level).toLowerCase()===level.toLowerCase()
+    );
+    pools[cat]=uniqueByQuestion(rawPool);
+
+    const key="skd_queue_excel_question_"+level.toLowerCase()+"_"+cat;
     let queue=[];
     try{ queue=JSON.parse(localStorage.getItem(key)||"[]"); }catch(e){ queue=[]; }
 
-    const map=new Map(pool.map(x=>[x.id,x]));
-    const valid=queue.filter(id=>map.has(id));
+    const map=new Map(pools[cat].map(x=>[questionKey(x),x]));
+    const valid=queue.filter(k=>map.has(k));
     const used=new Set(valid);
-    let fresh=pool.filter(x=>!used.has(x.id)).map(x=>x.id);
+    const fresh= randomize(pools[cat].filter(x=>!used.has(questionKey(x))).map(x=>questionKey(x)));
+    const oldFresh= fresh;
+    const recycled= randomize(pools[cat].map(x=>questionKey(x)));
 
-    if(fresh.length<need[cat]){
-      fresh=pool.map(x=>x.id);
-      for(let i=fresh.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fresh[i],fresh[j]]=[fresh[j],fresh[i]];}
-    }
-
-    const take=fresh.slice(0,need[cat]);
-    queue=fresh.slice(need[cat]);
-    localStorage.setItem(key,JSON.stringify(queue));
-    out.push(...take.map(id=>map.get(id)));
+    queues[cat]={
+      key,
+      map,
+      fresh:oldFresh,
+      recycled,
+      used:new Set(valid)
+    };
   }
 
-  return mode==="practice" ? shuffle(out).slice(0,20) : shuffle(out);
+  /* Ambil target normal tiap kategori terlebih dahulu. */
+  for(const cat of categories){
+    const qd=queues[cat];
+    const available = qd.fresh.length ? qd.fresh : qd.recycled;
+    const take=[];
+
+    for(const keyQ of available){
+      if(take.length>=need[cat]) break;
+      if(selectedQuestions.has(keyQ)) continue;
+      selectedQuestions.add(keyQ);
+      take.push(keyQ);
+    }
+
+    qd.taken=take;
+    qd.remainingFresh=qd.fresh.filter(k=>!take.includes(k));
+  }
+
+  /* Jika kategori tertentu kekurangan soal unik, isi kekurangannya
+     dari kategori lain pada level yang sama. Total tetap sesuai mode. */
+  const targetTotal = mode==="practice" ? 20 : 110;
+  let selectedTotal=[...selectedQuestions].length;
+  let deficit=targetTotal-selectedTotal;
+
+  if(deficit>0){
+    const fallback=[];
+    for(const cat of categories){
+      const qd=queues[cat];
+      const all=qd.recycled;
+      for(const keyQ of all){
+        if(selectedQuestions.has(keyQ)) continue;
+        fallback.push({cat,keyQ});
+      }
+    }
+
+    for(const item of randomize(fallback)){
+      if(deficit<=0) break;
+      if(selectedQuestions.has(item.keyQ)) continue;
+      selectedQuestions.add(item.keyQ);
+      queues[item.cat].taken.push(item.keyQ);
+      deficit--;
+    }
+  }
+
+  if(deficit>0) return [];
+
+  /* Simpan antrean: soal yang baru dipakai dipindahkan keluar dari antrean,
+     sementara soal yang belum dipakai tetap tersedia untuk putaran berikutnya. */
+  for(const cat of categories){
+    const qd=queues[cat];
+    const takenSet=new Set(qd.taken||[]);
+    const remaining=qd.recycled.filter(k=>!takenSet.has(k));
+    localStorage.setItem(qd.key,JSON.stringify(remaining));
+
+    for(const keyQ of qd.taken||[]){
+      const item=qd.map.get(keyQ);
+      if(item) out.push(item);
+    }
+  }
+
+  return randomize(out);
 }
 
 async function start(mode){
@@ -616,16 +933,15 @@ async function start(mode){
       await loadBankFromExcel();
     }catch(e){
       const local = document.getElementById("localExcelInput");
-      alert("DATABASE EXCEL BELUM TERBACA.\n\n" +
-            "Jika online: pastikan Excel berada satu folder dengan index.html.\n" +
-            "Jika lokal: klik Power By Wak Dit B@-it | @2026 → PILIH DATABASE EXCEL LOKAL.");
-      if(local) local.click();
+      appNotify("Aplikasi belum bisa memulai ujian karena database B@-it belum tersedia.\n\nJika online: pastikan Database_SIMULASI_SKD_IPDN_CPNS B@-it berada satu folder dengan Aplikasi.\nJika lokal: buka Power By Wak Dit B@-it | @2026 → LOGIN → PILIH DATABASE LOKAL B@-IT.", "DATABASE BELUM TERSEDIA", "⚠️");
+      // Jangan membuka file picker otomatis dari tombol LATIHAN/SIMULASI/UJIAN.
+      // Database lokal hanya dipilih melalui tombol khusus di panel informasi.
       return;
     }
   }
 
   const name = $("name").value.trim();
-  if(!name){ alert("Silakan isi Nama Peserta terlebih dahulu."); $("name").focus(); return; }
+  if(!name){ appNotify("Silakan isi Nama Peserta terlebih dahulu.", "DATA PESERTA", "👤", ()=>$("name").focus()); return; }
 
   let qs;
   try{
@@ -635,7 +951,7 @@ async function start(mode){
     return;
   }
   if(qs.length < (mode==="practice" ? 20 : 110)){
-    alert("Bank soal belum mencukupi untuk mode ini.");
+    appNotify("Bank soal belum mencukupi untuk mode ini.", "DATABASE SOAL", "📚");
     return;
   }
 
@@ -648,6 +964,7 @@ async function start(mode){
   $("home").classList.add("hidden");
   $("result").classList.add("hidden");
   $("exam").classList.remove("hidden");
+  setExamActive(true);
   $("examName").textContent = name;
   $("examTitle").textContent =
     mode==="practice" ? "LATIHAN SKD" :
@@ -661,6 +978,7 @@ async function start(mode){
     $("timer").classList.add("hidden");
   }
   render();
+  saveExamSession();
 }
 
 function tick(){
@@ -674,21 +992,40 @@ function tick(){
     if(s===60) soundWarning(1);
   }
 
+  saveExamSession();
+
   if(s<=0){
     clearInterval(state.timer);
+    state.timer=null;
+    state.seconds=0;
+    saveExamSession();
+
     if(state.mode!=="practice"){
       soundTimeUp();
-      finish(true, "timeup");
+
+      /* Waktu habis: jangan langsung menampilkan hasil.
+         Tampilkan informasi aplikasi terlebih dahulu.
+         Setelah peserta menekan OK, barulah masuk ke nilai. */
+      appNotify(
+        "⏰ WAKTU PENGERJAAN TELAH HABIS.\n\n"
+        +"Sesi ujian otomatis ditutup dan seluruh jawaban yang sudah tersimpan akan dinilai.\n\n"
+        +"Klik OK untuk melihat hasil ujian.",
+        "WAKTU HABIS",
+        "⏰",
+        ()=>finish(true, "timeup")
+      );
     }
     return;
   }
+
   state.seconds--;
+  saveExamSession();
 }
 function render(){
   const q=state.questions[state.index];
   $("qNo").textContent = "SOAL "+(state.index+1)+" / "+state.questions.length;
   $("qCat").textContent = q.cat;
-  $("qText").textContent = q.q;
+  $("qText").textContent = cleanQuestionDisplay(q.q);
 
   $("options").innerHTML = q.opts.map((op,i)=>{
     const checked=state.answers[state.index]===i ? "checked" : "";
@@ -702,7 +1039,7 @@ function render(){
   document.querySelectorAll('input[name="opt"]').forEach(r=>{
     r.addEventListener("change",()=>{
       state.answers[state.index]=Number(r.value);
-      renderNumbers();
+      saveExamSession();
       render();
     });
   });
@@ -724,12 +1061,42 @@ function renderNumbers(){
     return `<button class="${c}" data-i="${i}">${i+1}</button>`;
   }).join("");
   document.querySelectorAll(".num").forEach(b=>{
-    b.onclick=()=>{state.index=Number(b.dataset.i);render();}
+    b.onclick=()=>{state.index=Number(b.dataset.i);saveExamSession();render();}
   });
+}
+
+function getUnansweredIndexes(){
+  return state.questions
+    .map((_,i)=>state.answers[i]===null ? i : -1)
+    .filter(i=>i>=0);
+}
+
+function showUnansweredWarning(){
+  const unanswered=getUnansweredIndexes();
+  if(!unanswered.length) return false;
+
+  const first=unanswered[0];
+  state.index=first;
+  saveExamSession();
+  render();
+
+  appNotify(
+    "⚠️ MASIH ADA SOAL YANG BELUM DIJAWAB.\n\n"
+    +"Masih ada "+unanswered.length+" soal yang belum dikerjakan. "
+    +"Sistem belum mengizinkan sesi diakhiri selama waktu masih tersedia.\n\n"
+    +"Silakan selesaikan soal yang ditampilkan. "
+    +"Soal yang sudah ditandai tetap harus diselesaikan sebelum ujian dapat dikumpulkan.",
+    "BELUM DAPAT DIKUMPULKAN",
+    "⚠️"
+  );
+  return true;
 }
 
 function finish(auto=false, reason="manual"){
   if(state.timer) clearInterval(state.timer);
+  state.timer=null;
+  clearExamSession();
+  setExamActive(false);
 
   let correct=0, answered=0;
   const cats={TWK:{c:0,a:0},TIU:{c:0,a:0},TKP:{c:0,a:0}};
@@ -746,6 +1113,7 @@ function finish(auto=false, reason="manual"){
   const pct=Math.round(correct/state.questions.length*100);
   $("exam").classList.add("hidden");
   $("result").classList.remove("hidden");
+  document.body.classList.add("result-active");
 
   $("resultTitle").textContent = auto ? "WAKTU HABIS — HASIL UJIAN" : "HASIL "+(
     state.mode==="practice"?"LATIHAN":state.mode==="simulation"?"SIMULASI CAT":"UJIAN NYATA"
@@ -768,14 +1136,14 @@ function finish(auto=false, reason="manual"){
     const user=a===null?"Tidak dijawab":String.fromCharCode(65+a)+". "+escapeHtml(q.opts[a]);
     const right=String.fromCharCode(65+q.ans)+". "+escapeHtml(q.opts[q.ans]);
     return `<div class="review-item ${ok?"ok":"bad"}">
-      <b>${i+1}. ${escapeHtml(q.q)}</b>
+      <b>${i+1}. ${escapeHtml(cleanQuestionDisplay(q.q))}</b>
       <div>Jawaban Anda: ${user}</div>
       <div>Jawaban benar: ${right}</div>
       <div class="exp"><b>Pembahasan:</b> ${escapeHtml(q.exp||"Pembahasan belum tersedia.")}</div>
     </div>`;
   }).join("");
 
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo(0,0);
 
   if(auto && reason==="timeup"){
     setTimeout(()=>soundResult(pct),900);
@@ -798,16 +1166,74 @@ if(soundButton){
   };
 }
 
-$("prev").onclick=()=>{if(state.index>0){state.index--;render();}};
-$("next").onclick=()=>{if(state.index<state.questions.length-1){state.index++;render();}else{finish(false);}};
-$("flag").onclick=()=>{state.flags[state.index]=!state.flags[state.index];render();};
-$("finish").onclick=()=>{
-  if(confirm("Yakin ingin mengumpulkan ujian sekarang?")) finish(false);
+$("prev").onclick=()=>{
+  if(state.index>0){
+    state.index--;
+    saveExamSession();
+    render();
+  }
 };
+
+$("next").onclick=()=>{
+  const unanswered = state.answers[state.index] === null;
+  const marked = state.flags[state.index] === true;
+
+  // Soal yang belum dijawab tidak boleh dilewati tanpa ditandai.
+  if(unanswered && !marked){
+    appNotify(
+      "SOAL INI BELUM DIJAWAB.\n\n"
+      +"Silakan pilih salah satu jawaban terlebih dahulu. "
+      +"Jika memang ingin melewatinya sementara, tekan TANDAI terlebih dahulu.",
+      "SOAL BELUM DIJAWAB",
+      "⚑"
+    );
+    return;
+  }
+
+  if(state.index<state.questions.length-1){
+    state.index++;
+    saveExamSession();
+    render();
+  }else{
+    /* Sampai di soal terakhir tidak otomatis berarti boleh selesai.
+       Semua soal wajib sudah memiliki jawaban. */
+    if(showUnansweredWarning()) return;
+
+    appConfirm(
+      "Semua soal sudah dijawab. Yakin ingin mengumpulkan ujian sekarang?",
+      "SIAP DIKUMPULKAN",
+      "📋",
+      ()=>finish(false)
+    );
+  }
+};
+
+$("flag").onclick=()=>{
+  state.flags[state.index]=!state.flags[state.index];
+  saveExamSession();
+  render();
+};
+
+$("finish").onclick=()=>{
+  /* Selama waktu masih ada, tombol SELESAI tidak boleh
+     mengakhiri sesi jika masih ada jawaban kosong. */
+  if(showUnansweredWarning()) return;
+
+  appConfirm(
+    "Semua soal sudah dijawab. Yakin ingin mengumpulkan ujian sekarang?",
+    "KONFIRMASI KUMPULKAN",
+    "📋",
+    ()=>finish(false)
+  );
+};
+
 $("back").onclick=()=>{
+  clearExamSession();
+  setExamActive(false);
+  document.body.classList.remove("result-active");
   $("result").classList.add("hidden");
   $("home").classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo(0,0);
 };
 
 /* ================= INFO PEMBUAT + DATABASE ================= */
@@ -823,7 +1249,7 @@ function updateDatabaseInfo(){
     else if(lv==="sedang"){c.medium++;levels.Sedang++;}
     else if(lv==="sulit"){c.hard++;levels.Sulit++;}
   });
-  $("dbFile").textContent=DB_FILE_NAME;
+  $("dbFile").textContent="Database_SIMULASI_SKD_IPDN_CPNS";
   $("dbTotal").textContent=fmtNumber(BANK.length)+" SOAL";
   $("dbTWK").textContent=fmtNumber(cats.TWK.total);
   $("dbTIU").textContent=fmtNumber(cats.TIU.total);
@@ -847,9 +1273,9 @@ async function openInfoModal(){
     status.className="db-status";
     status.textContent="🟢 DATABASE TERHUBUNG";
   }catch(e){
-    $("dbFile").textContent=DB_FILE_NAME;
+    $("dbFile").textContent="Database_SIMULASI_SKD_IPDN_CPNS";
     $("dbTotal").textContent="GAGAL";
-    $("dbDetail").innerHTML=`<tr><td colspan="5">Database belum berhasil dibaca. Periksa lokasi dan nama file Excel.</td></tr>`;
+    $("dbDetail").innerHTML=`<tr><td colspan="5">Database belum berhasil dibaca. Periksa lokasi dan nama file B@-it.</td></tr>`;
     status.className="db-status error";
     status.textContent="🔴 DATABASE GAGAL DIMUAT";
   }
@@ -862,6 +1288,64 @@ $("powerFooter").addEventListener("click",openInfoModal);
 $("infoClose").addEventListener("click",closeInfoModal);
 $("infoModal").addEventListener("click",e=>{if(e.target===$("infoModal")) closeInfoModal();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").classList.contains("hidden")) closeInfoModal();});
+
+/* ================= PERSIST DATABASE LOKAL =================
+   Hanya menyimpan HANDLE file, bukan isi Excel/soal.
+   Jika browser mendukung File System Access API, sesi dapat
+   membuka kembali file Excel yang sama setelah refresh.
+*/
+const DB_HANDLE_STORE="SKD_IPDN_DB_HANDLE_V1";
+async function saveLocalDbHandle(handle){
+  if(!handle || !window.indexedDB) return;
+  try{
+    const db=await new Promise((resolve,reject)=>{
+      const r=indexedDB.open(DB_HANDLE_STORE,1);
+      r.onupgradeneeded=()=>r.result.createObjectStore("handles");
+      r.onsuccess=()=>resolve(r.result); r.onerror=()=>reject(r.error);
+    });
+    await new Promise((resolve,reject)=>{
+      const tx=db.transaction("handles","readwrite");
+      tx.objectStore("handles").put(handle,"excel");
+      tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error);
+    });
+    db.close();
+  }catch(e){}
+}
+async function getLocalDbHandle(){
+  if(!window.indexedDB) return null;
+  try{
+    const db=await new Promise((resolve,reject)=>{
+      const r=indexedDB.open(DB_HANDLE_STORE,1);
+      r.onupgradeneeded=()=>r.result.createObjectStore("handles");
+      r.onsuccess=()=>resolve(r.result); r.onerror=()=>reject(r.error);
+    });
+    const h=await new Promise((resolve,reject)=>{
+      const tx=db.transaction("handles","readonly");
+      const r=tx.objectStore("handles").get("excel");
+      r.onsuccess=()=>resolve(r.result||null); r.onerror=()=>reject(r.error);
+    });
+    db.close(); return h;
+  }catch(e){ return null; }
+}
+async function restoreLocalDatabase(){
+  if(location.protocol!=="file:") return false;
+  const h=await getLocalDbHandle();
+  if(!h || !h.getFile) return false;
+  try{
+    if(h.queryPermission){
+      let p=await h.queryPermission({mode:"read"});
+      if(p!=="granted" && h.requestPermission){
+        p=await h.requestPermission({mode:"read"});
+      }
+      if(p!=="granted") return false;
+    }
+    const f=await h.getFile();
+    BANK=[]; window.__BANK_READY=false;
+    await loadBankFromExcel(f);
+    updateDatabaseInfo();
+    return true;
+  }catch(e){ return false; }
+}
 
 (function(){
   const input = document.getElementById("localExcelInput");
@@ -899,14 +1383,37 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").c
   loginModal.addEventListener("click",e=>{if(e.target===loginModal) closeLogin();});
   document.addEventListener("keydown",e=>{if(e.key==="Escape" && !loginModal.classList.contains("hidden")) closeLogin();});
 
-  loginForm.addEventListener("submit",e=>{
+  loginForm.addEventListener("submit",async e=>{
     e.preventDefault();
     const u=loginUser.value.trim();
     const p=loginPass.value;
+    if(!u || !p){
+      loginError.textContent="❌ USER dan PASSWORD wajib diisi.";
+      return;
+    }
     if(u===LOCAL_DB_USERNAME && p===LOCAL_DB_PASSWORD){
       closeLogin();
-      input.value="";
-      input.click();
+      if(window.showOpenFilePicker){
+        try{
+          const [handle]=await window.showOpenFilePicker({
+            multiple:false,
+            types:[{description:"Database Excel",accept:{"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":[".xlsx"],"application/vnd.ms-excel":[".xls"]}}]
+          });
+          await saveLocalDbHandle(handle);
+          const file=await handle.getFile();
+          BANK=[]; window.__BANK_READY=false;
+          await loadBankFromExcel(file);
+          updateDatabaseInfo();
+          const status=document.getElementById("dbStatus");
+          if(status){status.className="db-status";status.textContent="🟢 DATABASE LOKAL TERHUBUNG";}
+          appNotify("DATABASE LOKAL BERHASIL DIBACA!\n\nFile: "+file.name+"\nJumlah soal: "+BANK.length.toLocaleString("id-ID"),"DATABASE TERHUBUNG","✅");
+        }catch(err){
+          if(err && err.name!=="AbortError") appNotify("Database B@-it gagal dibuka.","DATABASE GAGAL DIBUKA","❌");
+        }
+      }else{
+        input.value="";
+        input.click();
+      }
     }else{
       loginError.textContent="❌ USER atau PASSWORD salah.";
       loginPass.value="";
@@ -927,7 +1434,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").c
         status.className="db-status";
         status.textContent="🟢 DATABASE LOKAL TERHUBUNG";
       }
-      alert("✅ DATABASE LOKAL BERHASIL DIBACA!\n\nFile: " + file.name + "\nJumlah soal: " + BANK.length.toLocaleString("id-ID"));
+      appNotify("DATABASE LOKAL BERHASIL DIBACA!\n\nFile: " + file.name + "\nJumlah soal: " + BANK.length.toLocaleString("id-ID"), "DATABASE TERHUBUNG", "✅", async ()=>{ await restoreExamSession(); });
     }catch(e){
       console.error(e);
       const status = document.getElementById("dbStatus");
@@ -935,7 +1442,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape" && !$("infoModal").c
         status.className="db-status error";
         status.textContent="🔴 DATABASE GAGAL DIBACA";
       }
-      alert("❌ Database Excel gagal dibaca.\nPastikan file Excel memiliki sheet BANK_SOAL dan kolom: ID, Kategori, Tingkat, Soal, A, B, C, D, E, Jawaban, Pembahasan.");
+      appNotify("Database B@-it gagal dibaca.\nPastikan file B@-it memiliki sheet BANK_SOAL dan kolom: ID, Kategori, Tingkat, Soal, A, B, C, D, E, Jawaban, Pembahasan.", "DATABASE GAGAL DIBACA", "❌");
     }
   });
 })();
@@ -948,6 +1455,19 @@ document.querySelectorAll("button.start[data-mode]").forEach(btn=>{
   btn.addEventListener("click",()=>{
     start(btn.dataset.mode);
   });
+});
+
+/* Pulihkan sesi otomatis setelah halaman selesai dimuat. */
+window.addEventListener("load",async()=>{
+  // Online: Excel dibaca dari server. Local: coba buka kembali HANDLE Excel yang disimpan.
+  if(location.protocol==="file:" && !window.__BANK_READY){
+    await restoreLocalDatabase();
+  }
+  await restoreExamSession();
+});
+
+window.addEventListener("beforeunload",()=>{
+  saveExamSession();
 });
 </script>
 
