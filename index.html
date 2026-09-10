@@ -55,17 +55,17 @@ button,input{font:inherit}
 .brand h1{margin:0;font-size:20px}.brand small{opacity:.8}
 .main{max-width:1180px;margin:24px auto;padding:0 16px}
 .card{background:#fff;border:1px solid #d9e2ec;border-radius:16px;box-shadow:0 8px 24px #173b5d14}
-.login{max-width:700px;margin:45px auto;padding:30px}
+.login{max-width:1180px;margin:45px auto;padding:30px}
 .login h2{margin-top:0;color:#0b4d8a}
 label{font-weight:700;display:block;margin:12px 0 7px}
 input{width:100%;padding:13px 14px;border:1px solid #b9c8d8;border-radius:10px;outline:none}
 input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
-.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
 .mode{padding:22px;border-top:5px solid #0b65ad}
-.mode.green{border-top-color:#159447}.mode.red{border-top-color:#c73535}
+.mode.green{border-top-color:#159447}.mode.blue{border-top-color:#0b65ad}.mode.gold{border-top-color:#d4a017}.mode.red{border-top-color:#c73535}.mode.purple{border-top-color:#7b1fa2}
 .mode h3{margin:0 0 8px}.mode p{min-height:48px;color:#59687a;line-height:1.5}
 .btn{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;color:#fff;background:#0b4d8a}
-.btn:hover{filter:brightness(1.06)}.btn.green{background:#159447}.btn.red{background:#c73535}.btn.gold{background:#a87400}
+.btn:hover{filter:brightness(1.06)}.btn.green{background:#159447}.btn.blue{background:#0b65ad}.btn.red{background:#c73535}.btn.gold{background:#a87400}.btn.purple{background:#7b1fa2}
 .note{margin-top:16px;padding:12px 14px;border-radius:10px;background:#f4f8fc;color:#536477;font-size:13px}
 .exam-head{
   position:sticky;
@@ -216,232 +216,9 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .exp{color:#526273;font-size:14px;margin-top:8px}
 .footer{text-align:center;color:#6a7887;padding:28px 10px;font-size:13px}
 @media(max-width:850px){
-  .modes,
-  .scoregrid{
-    grid-template-columns:1fr;
-  }
-
-  .exam-wrap{
-    grid-template-columns:1fr;
-    width:100%;
-    padding:0 12px;
-  }
-
-  .sidebar{
-    position:static;
-    width:100%;
-  }
-
-  .exam-head-in{
-    flex-wrap:wrap;
-    width:100%;
-    min-width:0;
-  }
-
-  .exam-info-left,
-  .exam-participant,
-  .exam-participant > div{
-    min-width:0;
-    max-width:100%;
-  }
-
-  .exam-participant small{
-    overflow-wrap:anywhere;
-    word-break:break-word;
-  }
-
-  .exam-title{
-    white-space:normal;
-    overflow-wrap:anywhere;
-  }
-
-  .question{
-    width:100%;
-    min-width:0;
-  }
-
-  .qtext,
-  .opt{
-    max-width:100%;
-    overflow-wrap:anywhere;
-    word-break:break-word;
-  }
-
-  .opt{
-    width:100%;
-  }
-
-  .actions{
-    width:100%;
-    min-width:0;
-  }
-
-  .actions .btn{
-    min-width:0;
-    flex:1 1 0;
-  }
-
-  .grid{
-    width:100%;
-    min-width:0;
-  }
-}
-
-@media(max-width:600px){
-
-  .main{
-    width:100%;
-    padding-left:10px;
-    padding-right:10px;
-  }
-
-  .login{
-    width:100%;
-    margin:14px auto;
-    padding:18px 14px;
-  }
-
-  .mode{
-    width:100%;
-  }
-
-  /* HEADER UJIAN HP */
-  .exam-head{
-    padding:5px 6px;
-  }
-
-  .exam-head-in{
-    flex-direction:column;
-    align-items:stretch;
-    gap:10px;
-    padding:10px;
-  }
-
-  .exam-info-left{
-    width:100%;
-    flex-direction:column;
-    align-items:stretch;
-    gap:10px;
-  }
-
-  .exam-mode{
-    width:100%;
-    min-width:0;
-  }
-
-  .exam-title{
-    font-size:18px;
-    line-height:1.2;
-    white-space:normal;
-  }
-
-  .exam-participant{
-    width:100%;
-    padding-left:0;
-    padding-top:9px;
-    border-left:0;
-    border-top:1px solid rgba(255,255,255,.45);
-  }
-
-  .exam-participant small{
-    font-size:16px;
-    line-height:1.25;
-  }
-
-  .exam-head-in > div:last-child{
-    width:100%;
-    justify-content:space-between;
-  }
-
-  /* KOTAK SOAL */
-  .exam-wrap{
-    width:100%;
-    padding:0 8px;
-    margin:10px auto;
-  }
-
-  .question{
-    width:100%;
-    padding:15px 12px;
-  }
-
-  .qtext{
-    font-size:16px;
-    line-height:1.55;
-  }
-
-  /* PILIHAN JAWABAN */
-  .opt{
-    width:100%;
-    padding:11px 10px;
-    font-size:14px;
-    line-height:1.45;
-  }
-
-  /* TOMBOL */
-  .actions{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:6px;
-  }
-
-  .actions .btn{
-    width:100%;
-    padding:10px 4px;
-    font-size:11px;
-  }
-
-  /* NOMOR SOAL */
-  .sidebar{
-    width:100%;
-    padding:14px 12px;
-  }
-
-  .grid{
-    grid-template-columns:repeat(6,minmax(0,1fr));
-    gap:5px;
-  }
-
-  .num{
-    min-width:0;
-    width:100%;
-    padding:8px 0;
-    font-size:12px;
-  }
-}
-
-@media(max-width:380px){
-
-  .exam-title{
-    font-size:16px;
-  }
-
-  .exam-participant small{
-    font-size:14px;
-  }
-
-  .question{
-    padding:13px 10px;
-  }
-
-  .qtext{
-    font-size:15px;
-  }
-
-  .opt{
-    font-size:13px;
-    padding:10px 8px;
-  }
-
-  .actions .btn{
-    font-size:10px;
-    padding:9px 2px;
-  }
-
-  .num{
-    font-size:11px;
-    padding:7px 0;
-  }
+ .modes,.scoregrid{grid-template-columns:1fr}
+ .exam-wrap{grid-template-columns:1fr}.sidebar{position:static}
+ .exam-head-in{flex-wrap:wrap}.timer{font-size:20px}
 }
 
 /* LOCAL DATABASE BUTTON:
@@ -533,7 +310,7 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .info-label{font-size:11px;color:#7b8087;font-weight:900;letter-spacing:1px;text-transform:uppercase}.info-value{margin-top:5px;font-size:17px;font-weight:900;color:#202a35}.info-value.red{color:#9d1018}.info-value.gold{color:#a4760c}.info-value.silver{color:#626a73}
 .db-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 12px}.db-heading{font-size:17px;font-weight:900;color:#242b34}.db-status{padding:7px 11px;border-radius:999px;font-size:11px;font-weight:900;letter-spacing:.5px;background:#e9f8ed;color:#13733a;border:1px solid #9ad0ab;box-shadow:0 0 9px rgba(21,148,71,.2)}.db-status.error{background:#fff0f0;color:#a3131d;border-color:#e0a1a6;box-shadow:0 0 9px rgba(199,53,53,.18)}.db-status.loading{background:#fff8e5;color:#9a6a08;border-color:#e0c778}
 .db-total{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;padding:14px 16px;border-radius:15px;background:linear-gradient(90deg,#8e0000,#c71524 34%,#d4af37 68%,#aeb4ba);color:#fff;box-shadow:0 0 14px rgba(212,175,55,.32),inset 0 1px 0 rgba(255,255,255,.55)}.db-total strong{font-size:28px;text-shadow:0 0 9px rgba(255,255,255,.65)}.db-total span{font-size:12px;font-weight:800;opacity:.98}
-.db-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.db-stat{padding:12px;border-radius:13px;background:linear-gradient(145deg,#fff,#e1e4e7);border:1px solid #c2c6ca;text-align:center;box-shadow:inset 0 0 10px rgba(255,255,255,.9)}.db-stat b{display:block;font-size:21px;color:#222a33}.db-stat small{display:block;margin-top:3px;color:#707780;font-weight:800}.db-stat.easy{border-top:4px solid #1a9850}.db-stat.medium{border-top:4px solid #d19a19}.db-stat.hard{border-top:4px solid #c51e2b}
+.db-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.db-stat{padding:12px;border-radius:13px;background:linear-gradient(145deg,#fff,#e1e4e7);border:1px solid #c2c6ca;text-align:center;box-shadow:inset 0 0 10px rgba(255,255,255,.9)}.db-stat b{display:block;font-size:21px;color:#222a33}.db-stat small{display:block;margin-top:3px;color:#707780;font-weight:800}.db-stat.easy{border-top:4px solid #1a9850}.db-stat.medium{border-top:4px solid #d19a19}.db-stat.hard{border-top:4px solid #c51e2b}.db-stat.superhard{border-top:4px solid #7b1fa2}
 .db-table-wrap{margin-top:14px;overflow:auto;border-radius:14px;border:1px solid #c8cdd2;box-shadow:inset 0 0 12px rgba(0,0,0,.04)}.db-table{width:100%;border-collapse:collapse;min-width:520px;background:rgba(255,255,255,.82)}.db-table th{padding:10px;background:linear-gradient(90deg,#8d0000,#b80f19,#9fa5ab);color:#fff;font-size:11px;letter-spacing:.5px}.db-table td{padding:9px 10px;border-top:1px solid #e0e3e6;text-align:center;font-weight:800;color:#3d454d;font-size:12px}.db-table tr:nth-child(even){background:#f5f6f7}.db-table .total-row td{font-weight:900;background:#fff8dc;color:#8a650d}.info-foot{margin-top:15px;padding-top:13px;border-top:1px dashed #b7bbc0;text-align:center;color:#69717a;font-size:11px;line-height:1.6}.info-foot b{color:#9a7312}.shine-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff,0 0 14px #d4af37;margin:0 5px}
 @media(max-width:650px){.info-maker{grid-template-columns:1fr}.info-top{padding:22px 50px 18px}.info-body{padding:15px}.db-grid{grid-template-columns:1fr 1fr}.db-total strong{font-size:23px}.info-title{font-size:18px}}
 </style>
@@ -563,6 +340,71 @@ input:focus{border-color:#0b65ad;box-shadow:0 0 0 3px #0b65ad18}
 .app-dialog-top{padding:18px 22px;text-align:center;color:#fff;background:linear-gradient(135deg,#780000,#c20f1b 40%,#d4af37 72%,#9da2a8);position:relative}
 .app-dialog-top:after{content:"";position:absolute;left:10%;right:10%;bottom:0;height:3px;background:linear-gradient(90deg,transparent,#fff,#d4af37,#fff,transparent);box-shadow:0 0 9px #fff}
 .app-dialog-icon{font-size:30px;margin-bottom:3px}.app-dialog-title{margin:0;font-size:19px;font-weight:900;letter-spacing:.8px}.app-dialog-body{padding:22px;text-align:center;color:#27323d}.app-dialog-message{font-size:14px;line-height:1.65;font-weight:700;white-space:pre-line}.app-dialog-actions{display:flex;justify-content:center;gap:10px;margin-top:18px}.app-dialog-btn{min-width:120px;border:0;border-radius:11px;padding:11px 18px;font-weight:900;cursor:pointer}.app-dialog-btn.ok{color:#fff;background:linear-gradient(135deg,#8b0000,#c20f1b 45%,#d4af37)}.app-dialog-btn.cancel{color:#fff;background:linear-gradient(135deg,#8b9096,#c6c9cc)}
+
+/* MODE UTAMA — empat pilihan level, tetap memakai warna asli aplikasi */
+.mode{position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;background:linear-gradient(145deg,#fff,#f5f7f9 72%,#fff)}
+.mode:before{content:"";position:absolute;right:-35px;top:-45px;width:95px;height:95px;border-radius:50%;background:rgba(255,255,255,.72);box-shadow:0 0 25px rgba(255,255,255,.7)}
+.mode:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(23,59,93,.18)}
+.mode h3{position:relative;font-size:17px;letter-spacing:.3px;white-space:nowrap}
+.mode p{position:relative;font-size:12.5px}
+.mode p b{font-size:11px;letter-spacing:.7px}
+.mode .btn{position:relative;width:100%;margin-top:7px;box-shadow:0 6px 14px rgba(23,59,93,.14)}
+.mode.green{background:linear-gradient(145deg,#fff,#f1fbf5)}
+.mode.blue{background:linear-gradient(145deg,#fff,#f1f7fd)}
+.mode.gold{background:linear-gradient(145deg,#fff,#fff9e9)}
+.mode.purple{background:linear-gradient(145deg,#fff,#faf2fc)}
+@media(max-width:1100px){.modes{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.modes{grid-template-columns:1fr}}
+/* ===== SISTEM LEVEL BERURUTAN ===== */
+.mode.locked{
+  opacity:.62;
+  filter:saturate(.55);
+  cursor:not-allowed;
+}
+.mode.locked:hover{transform:none;box-shadow:none}
+.mode .mode-lock{
+  position:relative;
+  margin:8px 0 5px;
+  padding:7px 9px;
+  border-radius:9px;
+  background:#f0f2f5;
+  color:#69717a;
+  font-size:11px;
+  font-weight:900;
+  text-align:center;
+  letter-spacing:.3px;
+}
+.mode.unlocked .mode-lock{
+  background:#eaf8ef;
+  color:#13733a;
+}
+.mode .start:disabled{
+  cursor:not-allowed;
+  opacity:.55;
+  filter:grayscale(.45);
+}
+.mode.unlocked .start:disabled{
+  opacity:1;
+  filter:none;
+}
+.result-gate{
+  margin-top:16px;
+  padding:13px 15px;
+  border-radius:12px;
+  text-align:center;
+  font-weight:900;
+  line-height:1.55;
+}
+.result-gate.pass{
+  background:#eaf8ef;
+  color:#13733a;
+  border:1px solid #9ad0ab;
+}
+.result-gate.fail{
+  background:#fff0f0;
+  color:#a3131d;
+  border:1px solid #e0a1a6;
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -685,23 +527,28 @@ body.result-active .result{
       <div class="modes">
         <div class="card mode green">
           <h3>🟢 LATIHAN</h3>
-          <p>20 soal acak. Tanpa batas waktu. Setelah selesai, lihat pembahasan dan jawaban.</p>
-          <button class="btn green start" data-mode="practice">MULAI LATIHAN</button>
+          <p><b>LEVEL 1</b><br>20 soal acak tanpa batas waktu. Setelah selesai, lihat pembahasan dan jawaban.</p>
+          <div class="mode-lock" data-lock-for="practice">🔓 TERSEDIA</div>          <button class="btn green start" data-mode="practice">MULAI LATIHAN</button>
         </div>
-        <div class="card mode">
-          <h3>🔵 SIMULASI CAT</h3>
-          <p>110 soal dengan komposisi 30 TWK, 35 TIU, 45 TKP dan waktu 100 menit.</p>
-          <button class="btn start" data-mode="simulation">MULAI SIMULASI</button>
+        <div class="card mode blue">
+          <h3>🔵 SIMULASI</h3>
+          <p><b>LEVEL 2</b><br>110 soal: 30 TWK, 35 TIU, 45 TKP dengan waktu 100 menit.</p>
+          <div class="mode-lock" data-lock-for="simulation">🔒 SELESAIKAN LATIHAN 100%</div>          <button class="btn blue start" data-mode="simulation">MULAI SIMULASI</button>
         </div>
-        <div class="card mode red">
-          <h3>🔴 UJIAN NYATA</h3>
-          <p>Tampilan dibuat lebih ketat: 110 soal, 100 menit, navigasi nomor dan penandaan soal.</p>
-          <button class="btn red start" data-mode="real">MULAI UJIAN</button>
+        <div class="card mode gold">
+          <h3>🟡 SIMULASI CAT</h3>
+          <p><b>LEVEL 3</b><br>110 soal: 30 TWK, 35 TIU, 45 TKP dengan waktu 100 menit.</p>
+          <div class="mode-lock" data-lock-for="cat">🔒 SELESAIKAN SIMULASI 100%</div>          <button class="btn gold start" data-mode="cat">MULAI SIMULASI CAT</button>
+        </div>
+        <div class="card mode purple">
+          <h3>🟣 SIMULASI UJIAN CAT</h3>
+          <p><b>LEVEL 4</b><br>110 soal: 30 TWK, 35 TIU, 45 TKP dengan waktu 100 menit.</p>
+          <div class="mode-lock" data-lock-for="real">🔒 SELESAIKAN SIMULASI CAT 100%</div>          <button class="btn purple start" data-mode="real">MULAI UJIAN NYATA</button>
         </div>
       </div>
       <div class="note">
         <b>Catatan:</b> aplikasi ini adalah simulator latihan mandiri, bukan sistem resmi BKN/IPDN.
-        Database soal dibaca dari file Excel dan sistem mengacak paket; soal yang sudah keluar tidak dipakai lagi sampai antrean soal habis. Komposisi 110 soal dan 100 menit mengikuti pola SKD CAT yang digunakan BKN pada seleksi sekolah kedinasan. 
+        Database soal dibaca dari file B@-it dan sistem mengacak paket; soal yang sudah keluar tidak dipakai lagi sampai antrean soal habis. Komposisi 110 soal dan 100 menit mengikuti pola SKD CAT yang digunakan BKN pada seleksi sekolah kedinasan. 
       </div>
     </div>
   </section>
@@ -766,7 +613,7 @@ body.result-active .result{
   </section>
 
   <div class="source-note">
-  <b>Keterangan Bank Soal:</b> soal dalam aplikasi ini adalah soal latihan/prediksi orisinal berbasis materi dan pola SKD.
+  <b>Keterangan Tentang Soal:</b> soal dalam aplikasi ini adalah soal latihan/prediksi orisinal berbasis materi dan pola SKD.
   Soal tidak dinyatakan sebagai soal resmi BKN atau soal yang pernah keluar, kecuali jika sumbernya memang dapat diverifikasi.
 </div>
 <div id="powerFooter" class="footer" title="Buka informasi aplikasi dan database">Power By Wak Dit B@-it | @2026</div>
@@ -844,10 +691,11 @@ body.result-active .result{
         <div class="db-stat easy"><b id="dbEasy">-</b><small>MUDAH</small></div>
         <div class="db-stat medium"><b id="dbMedium">-</b><small>SEDANG</small></div>
         <div class="db-stat hard"><b id="dbHard">-</b><small>SULIT</small></div>
+        <div class="db-stat superhard"><b id="dbSuperHard">-</b><small>SUPER SULIT</small></div>
       </div>
       <div class="db-table-wrap">
         <table class="db-table">
-          <thead><tr><th>KATEGORI</th><th>MUDAH</th><th>SEDANG</th><th>SULIT</th><th>TOTAL</th></tr></thead>
+          <thead><tr><th>KATEGORI</th><th>MUDAH</th><th>SEDANG</th><th>SULIT</th><th>SUPER SULIT</th><th>TOTAL</th></tr></thead>
           <tbody id="dbDetail"><tr><td colspan="5">Menunggu database...</td></tr></tbody>
         </table>
       </div>
@@ -879,7 +727,7 @@ function updateLocalDbButtonVisibility(){
   const online = /^https?:$/i.test(location.protocol);
   btn.classList.toggle("online-hidden", online);
 }
-const DB_FILE_NAME = "Database_SIMULASI_SKD_IPDN_CPNS.xlsx";
+const DB_FILE_NAME = "Database_SIMULASI_SKD_IPDN_CPNS_8000_SUPER_SULIT_REPAIRED_8000.xlsx";
 let BANK = [];
 let bankLoadPromise = null;
 
@@ -903,7 +751,7 @@ function cleanQuestionDisplay(text){
 
 function excelRowToQuestion(row, index){
   const cat = String(row.Kategori ?? "").trim().toUpperCase();
-  const level = String(row.Tingkat ?? "").trim();
+  const level = String(row.Tingkat_Baru ?? row.Tingkat ?? "").trim();
   const q = String(row.Soal ?? "").trim();
   const opts = ["A","B","C","D","E"].map(k=>String(row[k] ?? "").trim());
   const letter = String(row.Jawaban ?? "").trim().toUpperCase();
@@ -966,7 +814,7 @@ async function loadBankFromExcel(fileOverride=null){
         id: normalize(r.ID || r.Id || r.id) || ("EXCEL-"+(idx+1)),
         cat: normalize(r.Kategori || r.KATEGORI || r.KategoriSoal).toUpperCase(),
         sub: normalize(r.Submateri || r.SUBMATERI),
-        level: normalize(r.Tingkat || r.TINGKAT).toLowerCase(),
+        level: normalize(r.Tingkat_Baru || r.Tingkat || r.TINGKAT).toLowerCase(),
         q: question,
         opts,
         ans: answerIndex,
@@ -1065,7 +913,7 @@ async function restoreExamSession(){
     document.body.classList.remove("result-active");
     $("exam").classList.remove("hidden");
     $("examName").textContent=state.name;
-    $("examTitle").textContent=state.mode==="practice"?"LATIHAN SKD":state.mode==="simulation"?"SIMULASI CAT":"UJIAN NYATA";
+    $("examTitle").textContent=modeLabel(state.mode);
     setExamActive(true);
 
     if(state.seconds>0){
@@ -1119,6 +967,80 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape" && !appModal.classLi
    Semua suara dibuat langsung oleh browser, tanpa file audio eksternal.
    70% adalah ambang SIMULASI aplikasi, bukan ketentuan resmi BKN/IPDN.
 */
+/* ================= LEVEL BERURUTAN / WAJIB 100% =================
+   Level berikutnya baru terbuka jika level sebelumnya mendapat
+   100% benar. Progress disimpan di browser agar tidak hilang saat
+   kembali ke menu atau refresh.
+*/
+const GATE_KEY = "SKD_IPDN_LEVEL_GATE_V1";
+const GATE_MODES = ["practice","simulation","cat","real"];
+
+function getGate(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(GATE_KEY)||"null");
+    if(saved && typeof saved==="object") return {
+      practice:saved.practice===true,
+      simulation:saved.simulation===true,
+      cat:saved.cat===true,
+      real:saved.real===true
+    };
+  }catch(e){}
+  return {practice:false,simulation:false,cat:false,real:false};
+}
+
+function saveGate(gate){
+  try{ localStorage.setItem(GATE_KEY,JSON.stringify(gate)); }catch(e){}
+}
+
+function isModeUnlocked(mode){
+  const gate=getGate();
+  const index=GATE_MODES.indexOf(mode);
+  if(index<=0) return true;
+  return gate[GATE_MODES[index-1]]===true;
+}
+
+function unlockMode(mode){
+  if(!GATE_MODES.includes(mode)) return;
+  const gate=getGate();
+  gate[mode]=true;
+  saveGate(gate);
+  updateModeCards();
+}
+
+function resetFollowingModes(mode){
+  const index=GATE_MODES.indexOf(mode);
+  if(index<0) return;
+  const gate=getGate();
+  for(let i=index;i<GATE_MODES.length;i++) gate[GATE_MODES[i]]=false;
+  saveGate(gate);
+  updateModeCards();
+}
+
+function updateModeCards(){
+  document.querySelectorAll(".mode .start").forEach(btn=>{
+    const mode=btn.dataset.mode;
+    const card=btn.closest(".mode");
+    const lock=card?.querySelector(".mode-lock");
+    const unlocked=isModeUnlocked(mode);
+    btn.disabled=!unlocked;
+    card?.classList.toggle("locked",!unlocked);
+    card?.classList.toggle("unlocked",unlocked);
+    if(lock){
+      if(mode==="practice"){
+        lock.textContent="🔓 TERSEDIA";
+      }else if(unlocked){
+        lock.textContent="🔓 TERBUKA — SILAKAN MULAI";
+      }else{
+        const index=GATE_MODES.indexOf(mode);
+        const previous=GATE_MODES[Math.max(0,index-1)];
+        lock.textContent="🔒 SELESAIKAN "+modeLabel(previous)+" 100%";
+      }
+    }
+  });
+}
+
+const MASTER_PASS_PERCENT = 100;
+
 const PASS_PERCENT = 70;
 let soundEnabled = true;
 let audioCtx = null;
@@ -1199,7 +1121,7 @@ function soundResult(pct){
 
 function makeExam(mode){
   const need = mode==="practice" ? {TWK:7,TIU:7,TKP:6} : {TWK:30,TIU:35,TKP:45};
-  const levelByMode = {practice:"Mudah", simulation:"Sedang", real:"Sulit"};
+  const levelByMode = {practice:"Mudah", simulation:"Sedang", cat:"Sulit", real:"Super Sulit"};
   const level = levelByMode[mode] || "Sedang";
   const categories=["TWK","TIU","TKP"];
   const selectedQuestions=new Set();
@@ -1329,7 +1251,24 @@ function makeExam(mode){
   return randomize(out);
 }
 
+function modeLabel(mode){
+  return mode==="practice" ? "LATIHAN" :
+         mode==="simulation" ? "SIMULASI" :
+         mode==="cat" ? "SIMULASI CAT" : "UJIAN NYATA";
+}
+
 async function start(mode){
+  if(!isModeUnlocked(mode)){
+    const index=GATE_MODES.indexOf(mode);
+    const previous=GATE_MODES[Math.max(0,index-1)];
+    appNotify(
+      "Mode ini masih terkunci. Anda harus menyelesaikan "+modeLabel(previous)+" terlebih dahulu dengan nilai tepat 100%. Jika nilainya di bawah 100%, ulangi "+modeLabel(previous)+" sampai semua jawaban benar.",
+      "LEVEL MASIH TERKUNCI",
+      "🔒"
+    );
+    return;
+  }
+
   if(!window.__BANK_READY){
     try{
       await loadBankFromExcel();
@@ -1368,9 +1307,7 @@ async function start(mode){
   $("exam").classList.remove("hidden");
   setExamActive(true);
   $("examName").textContent = name;
-  $("examTitle").textContent =
-    mode==="practice" ? "LATIHAN SKD" :
-    mode==="simulation" ? "SIMULASI CAT" : "UJIAN NYATA";
+  $("examTitle").textContent = modeLabel(mode);
 
   if(state.seconds){
     $("timer").classList.remove("hidden");
@@ -1513,13 +1450,22 @@ function finish(auto=false, reason="manual"){
   });
 
   const pct=Math.round(correct/state.questions.length*100);
+  const passed100 = correct===state.questions.length && pct===MASTER_PASS_PERCENT;
+  const finishedMode=state.mode;
+
+  // Hanya nilai 100% yang membuka level berikutnya.
+  if(passed100){
+    unlockMode(finishedMode);
+  }else{
+    // Level yang gagal tetap harus diulang; level sesudahnya tidak boleh terbuka.
+    resetFollowingModes(finishedMode);
+  }
+
   $("exam").classList.add("hidden");
   $("result").classList.remove("hidden");
   document.body.classList.add("result-active");
 
-  $("resultTitle").textContent = auto ? "WAKTU HABIS — HASIL UJIAN" : "HASIL "+(
-    state.mode==="practice"?"LATIHAN":state.mode==="simulation"?"SIMULASI CAT":"UJIAN NYATA"
-  );
+  $("resultTitle").textContent = auto ? "WAKTU HABIS — HASIL UJIAN" : "HASIL "+modeLabel(state.mode);
   $("resultSub").textContent = "Peserta: "+state.name;
 
   $("scores").innerHTML = [
@@ -1531,6 +1477,18 @@ function finish(auto=false, reason="manual"){
   $("summary").innerHTML =
     `<b>Ringkasan:</b> ${correct} benar dari ${state.questions.length} soal
     (${pct}%). Terjawab ${answered} soal, tidak terjawab ${state.questions.length-answered} soal.`;
+
+  const nextIndex=GATE_MODES.indexOf(finishedMode)+1;
+  const nextMode=GATE_MODES[nextIndex];
+  let gateMessage="";
+  if(passed100){
+    gateMessage = nextMode
+      ? `<div class="result-gate pass">✅ LULUS 100%!<br>${modeLabel(nextMode)} sekarang sudah TERBUKA.</div>`
+      : `<div class="result-gate pass">🏆 SELAMAT! SEMUA LEVEL SUDAH DISELESAIKAN DENGAN 100%.</div>`;
+  }else{
+    gateMessage = `<div class="result-gate fail">❌ BELUM LULUS.<br>Nilai wajib <b>100%</b>. Silakan ulangi ${modeLabel(finishedMode)} sampai semua soal benar.</div>`;
+  }
+  $("summary").innerHTML += gateMessage;
 
   $("review").innerHTML=state.questions.map((q,i)=>{
     const a=state.answers[i];
@@ -1635,22 +1593,42 @@ $("back").onclick=()=>{
   document.body.classList.remove("result-active");
   $("result").classList.add("hidden");
   $("home").classList.remove("hidden");
+  updateModeCards();
   window.scrollTo(0,0);
 };
 
 /* ================= INFO PEMBUAT + DATABASE ================= */
 function fmtNumber(n){ return Number(n||0).toLocaleString("id-ID"); }
 function updateDatabaseInfo(){
-  const cats={TWK:{easy:0,medium:0,hard:0,total:0},TIU:{easy:0,medium:0,hard:0,total:0},TKP:{easy:0,medium:0,hard:0,total:0}};
-  const levels={Mudah:0,Sedang:0,Sulit:0};
+  const cats={
+    TWK:{easy:0,medium:0,hard:0,superhard:0,total:0},
+    TIU:{easy:0,medium:0,hard:0,superhard:0,total:0},
+    TKP:{easy:0,medium:0,hard:0,superhard:0,total:0}
+  };
+  const levels={Mudah:0,Sedang:0,Sulit:0,"Super Sulit":0};
+
   BANK.forEach(q=>{
-    const c=cats[q.cat]; if(!c) return;
+    const c=cats[q.cat];
+    if(!c) return;
+
     c.total++;
-    const lv=String(q.level||"").toLowerCase();
-    if(lv==="mudah"){c.easy++;levels.Mudah++;}
-    else if(lv==="sedang"){c.medium++;levels.Sedang++;}
-    else if(lv==="sulit"){c.hard++;levels.Sulit++;}
+    const lv=String(q.level||"").trim().toLowerCase();
+
+    if(lv==="mudah"){
+      c.easy++;
+      levels.Mudah++;
+    }else if(lv==="sedang"){
+      c.medium++;
+      levels.Sedang++;
+    }else if(lv==="sulit"){
+      c.hard++;
+      levels.Sulit++;
+    }else if(lv==="super sulit" || lv==="super_sulit" || lv==="supersulit"){
+      c.superhard++;
+      levels["Super Sulit"]++;
+    }
   });
+
   $("dbFile").textContent="Database_SIMULASI_SKD_IPDN_CPNS";
   $("dbTotal").textContent=fmtNumber(BANK.length)+" SOAL";
   $("dbTWK").textContent=fmtNumber(cats.TWK.total);
@@ -1659,9 +1637,27 @@ function updateDatabaseInfo(){
   $("dbEasy").textContent=fmtNumber(levels.Mudah);
   $("dbMedium").textContent=fmtNumber(levels.Sedang);
   $("dbHard").textContent=fmtNumber(levels.Sulit);
+  $("dbSuperHard").textContent=fmtNumber(levels["Super Sulit"]);
+
   $("dbDetail").innerHTML=["TWK","TIU","TKP"].map(c=>{
-    const x=cats[c]; return `<tr><td>${c}</td><td>${fmtNumber(x.easy)}</td><td>${fmtNumber(x.medium)}</td><td>${fmtNumber(x.hard)}</td><td>${fmtNumber(x.total)}</td></tr>`;
-  }).join("")+`<tr class="total-row"><td>TOTAL</td><td>${fmtNumber(levels.Mudah)}</td><td>${fmtNumber(levels.Sedang)}</td><td>${fmtNumber(levels.Sulit)}</td><td>${fmtNumber(BANK.length)}</td></tr>`;
+    const x=cats[c];
+    return `<tr>
+      <td>${c}</td>
+      <td>${fmtNumber(x.easy)}</td>
+      <td>${fmtNumber(x.medium)}</td>
+      <td>${fmtNumber(x.hard)}</td>
+      <td>${fmtNumber(x.superhard)}</td>
+      <td>${fmtNumber(x.total)}</td>
+    </tr>`;
+  }).join("")+
+  `<tr class="total-row">
+    <td>TOTAL</td>
+    <td>${fmtNumber(levels.Mudah)}</td>
+    <td>${fmtNumber(levels.Sedang)}</td>
+    <td>${fmtNumber(levels.Sulit)}</td>
+    <td>${fmtNumber(levels["Super Sulit"])}</td>
+    <td>${fmtNumber(BANK.length)}</td>
+  </tr>`;
 }
 async function openInfoModal(){
   $("infoModal").classList.remove("hidden");
@@ -1677,7 +1673,7 @@ async function openInfoModal(){
   }catch(e){
     $("dbFile").textContent="Database_SIMULASI_SKD_IPDN_CPNS";
     $("dbTotal").textContent="GAGAL";
-    $("dbDetail").innerHTML=`<tr><td colspan="5">Database belum berhasil dibaca. Periksa lokasi dan nama file B@-it.</td></tr>`;
+    $("dbDetail").innerHTML=`<tr><td colspan="6">Database belum berhasil dibaca. Periksa lokasi dan nama file B@-it.</td></tr>`;
     status.className="db-status error";
     status.textContent="🔴 DATABASE GAGAL DIMUAT";
   }
@@ -1858,6 +1854,9 @@ document.querySelectorAll("button.start[data-mode]").forEach(btn=>{
     start(btn.dataset.mode);
   });
 });
+
+/* Terapkan status kunci 4 level saat halaman dibuka. */
+updateModeCards();
 
 /* Pulihkan sesi otomatis setelah halaman selesai dimuat. */
 window.addEventListener("load",async()=>{
